@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Debug Preview Rail</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #141518;
+      --panel: #1b1d21;
+      --panel-2: #202329;
+      --stroke: rgba(255, 255, 255, 0.12);
+      --stroke-soft: rgba(255, 255, 255, 0.08);
+      --text: #f0f2f5;
+      --muted: rgba(255, 255, 255, 0.56);
+      --teal: #36c9ff;
+      --orange: #ff9c3d;
+      --blue: #2398ff;
+      --dash: rgba(255, 255, 255, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top, rgba(77, 148, 255, 0.12), transparent 38%),
+        linear-gradient(180deg, #111317 0%, #17191d 100%);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      color: var(--text);
+    }
+
+    .panel {
+      width: 920px;
+      padding: 22px 22px 26px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .title {
+      margin: 0 0 18px;
+      font-size: 20px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .rail {
+      position: relative;
+      min-height: 220px;
+      padding: 28px 30px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid var(--stroke-soft);
+      overflow: hidden;
+    }
+
+    .rail::before,
+    .rail::after,
+    .bounds::before,
+    .bounds::after {
+      content: "";
+      position: absolute;
+      border-color: var(--dash);
+      pointer-events: none;
+    }
+
+    .rail::before {
+      left: 20px;
+      right: 20px;
+      top: 18px;
+      border-top: 1px dashed var(--dash);
+    }
+
+    .rail::after {
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      border-top: 1px dashed var(--dash);
+    }
+
+    .bounds::before {
+      top: 18px;
+      bottom: 18px;
+      left: 20px;
+      border-left: 1px dashed var(--dash);
+    }
+
+    .bounds::after {
+      top: 18px;
+      bottom: 18px;
+      right: 20px;
+      border-left: 1px dashed var(--dash);
+    }
+
+    .center-line {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 50%;
+      border-top: 1px dashed rgba(84, 180, 255, 0.22);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .neighbors {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 164px;
+    }
+
+    .debug-label {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .fluxbar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      padding-top: 18px;
+    }
+
+    .tag-baseline {
+      position: absolute;
+      left: -6px;
+      right: -6px;
+      top: 14px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+    }
+
+    .module-box {
+      position: relative;
+      padding: 10px 10px 8px;
+      flex: 0 0 auto;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .module-tag {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0 6px;
+      font-size: 10px;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.52);
+      background: #1d1d1f;
+    }
+
+    .temp {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 70px;
+    }
+
+    .thermo {
+      width: 18px;
+      height: 18px;
+      color: rgba(255,255,255,0.82);
+      flex: 0 0 auto;
+    }
+
+    .thermo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .temp-value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .meter {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .meter-label {
+      font-size: 13px;
+      line-height: 0.92;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .pill {
+      width: 18px;
+      height: 46px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fill {
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      height: 11px;
+      border-radius: 999px;
+    }
+
+    .fill.cpu {
+      background: var(--orange);
+    }
+
+    .fill.mem {
+      background: var(--blue);
+      height: 24px;
+    }
+
+    .network {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .network-arrows {
+      font-size: 22px;
+      line-height: 0.9;
+      font-weight: 700;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .network-values {
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <h1 class="title">Preview Debug Rail</h1>
+
+    <section class="rail">
+      <div class="bounds"></div>
+      <div class="center-line"></div>
+
+      <div class="neighbors">
+        <div class="debug-label">FluxBar Debug Position</div>
+
+        <div class="fluxbar">
+          <div class="tag-baseline" aria-hidden="true"></div>
+
+          <div class="module-box">
+            <div class="module-tag">Temp</div>
+            <div class="temp">
+              <div class="thermo" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 3.3a2.1 2.1 0 0 0-2.1 2.1v6.1a4.1 4.1 0 1 0 4.2 0V5.4A2.1 2.1 0 0 0 10 3.3Z"></path>
+                  <path d="M10 10.4v4.2"></path>
+                </svg>
+              </div>
+              <div class="temp-value">46°</div>
+            </div>
+          </div>
+
+          <div class="module-box">
+            <div class="module-tag">CPU</div>
+            <div class="meter">
+              <div class="meter-label">C<br>P<br>U</div>
+              <div class="pill"><div class="fill cpu"></div></div>
+            </div>
+          </div>
+
+          <div class="module-box">
+            <div class="module-tag">Mem</div>
+            <div class="meter">
+              <div class="meter-label">M<br>E<br>M</div>
+              <div class="pill"><div class="fill mem"></div></div>
+            </div>
+          </div>
+
+          <div class="module-box">
+            <div class="module-tag">Net</div>
+            <div class="network">
+              <div class="network-arrows">↑<br>↓</div>
+              <div class="network-values">0K<br>3K</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="caption">Preview only: align the FluxBar modules visually without size readouts.</div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Weather / Focus 状态配色预览</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --blue: #4DA3FF;
+      --yellow: #F5C451;
+      --cloud: #8FA8C3;
+      --storm: #6D78B8;
+      --purple: #8B7CFF;
+      --green: #72CDA7;
+      --stone: #A58E7A;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 0 0 22px;
+      max-width: 960px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 214px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 54px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .swatch {
+      margin-top: 10px;
+      color: rgba(245,247,249,0.50);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .sunny { color: var(--yellow); }
+    .cloudy { color: var(--cloud); }
+    .rainy { color: var(--blue); }
+    .stormy { color: var(--storm); }
+    .deep { color: var(--purple); }
+    .flow { color: var(--blue); }
+    .planning { color: var(--green); }
+    .offline { color: var(--stone); }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">Flexible Slot · Weather / Focus 配色方案</h1>
+    <p class="subhead">
+      这版只看右上角灵活卡位的状态方案，不改 Overview 的六卡结构。
+      `Weather` 走环境信息色，允许更明显的颜色差异；`Focus` 走工作状态色，整体更克制。
+    </p>
+
+    <div class="stack">
+      <section class="module">
+        <h2 class="module-title">Weather</h2>
+        <p class="module-note">
+          天气模式更适合做成“环境状态卡”。颜色可以更明确，但仍然只集中在主状态词上，脚注保持中性。
+        </p>
+        <div class="grid">
+          <div class="card">
+            <div class="label">Weather</div>
+            <div class="status-word sunny">Sunny</div>
+            <div class="footnote">Clear and bright outside</div>
+            <div class="swatch">#F5C451</div>
+          </div>
+          <div class="card">
+            <div class="label">Weather</div>
+            <div class="status-word cloudy">Cloudy</div>
+            <div class="footnote">Soft light and mild skies</div>
+            <div class="swatch">#8FA8C3</div>
+          </div>
+          <div class="card">
+            <div class="label">Weather</div>
+            <div class="status-word rainy">Rainy</div>
+            <div class="footnote">Wet streets and cooler air</div>
+            <div class="swatch">#4DA3FF</div>
+          </div>
+          <div class="card">
+            <div class="label">Weather</div>
+            <div class="status-word stormy">Stormy</div>
+            <div class="footnote">Heavy clouds and unstable weather</div>
+            <div class="swatch">#6D78B8</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="module">
+        <h2 class="module-title">Focus</h2>
+        <p class="module-note">
+          Focus 更像工作状态或氛围状态，颜色不宜太亮，保持在蓝、紫、青绿、暖灰这些更耐看的范围里。
+        </p>
+        <div class="grid">
+          <div class="card">
+            <div class="label">Focus</div>
+            <div class="status-word deep">Deep Work</div>
+            <div class="footnote">Protected time for building</div>
+            <div class="swatch">#8B7CFF</div>
+          </div>
+          <div class="card">
+            <div class="label">Focus</div>
+            <div class="status-word flow">Flow</div>
+            <div class="footnote">Smooth pace, steady output</div>
+            <div class="swatch">#4DA3FF</div>
+          </div>
+          <div class="card">
+            <div class="label">Focus</div>
+            <div class="status-word planning">Planning</div>
+            <div class="footnote">Thinking before making moves</div>
+            <div class="swatch">#72CDA7</div>
+          </div>
+          <div class="card">
+            <div class="label">Focus</div>
+            <div class="status-word offline">Offline</div>
+            <div class="footnote">Quiet mode, low interruption</div>
+            <div class="swatch">#A58E7A</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

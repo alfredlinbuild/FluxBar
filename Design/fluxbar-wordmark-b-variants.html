@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Editorial Utility Variants</title>
+  <style>
+    :root {
+      --ink: #162538;
+      --muted: #6c7d90;
+      --line: rgba(25, 42, 62, 0.12);
+      --paper: rgba(252, 254, 255, 0.76);
+      --bg-0: #edf4fb;
+      --bg-1: #dee7f3;
+      --accent-0: #8a91ff;
+      --accent-1: #5866ef;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255,255,255,0.92), transparent 24%),
+        radial-gradient(circle at 82% 14%, rgba(124, 143, 255, 0.16), transparent 18%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    .page {
+      min-height: 100%;
+      padding: 40px;
+    }
+
+    .canvas {
+      min-height: calc(100vh - 80px);
+      padding: 52px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(247,251,255,0.72)),
+        var(--paper);
+      box-shadow:
+        0 22px 64px rgba(20, 36, 56, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #7d8fa6;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 44px;
+      align-items: end;
+      padding-bottom: 34px;
+      border-bottom: 1px solid rgba(22, 37, 56, 0.08);
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      font-size: clamp(70px, 10vw, 130px);
+      line-height: 0.92;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .hero .flux {
+      font-weight: 500;
+      letter-spacing: -0.088em;
+    }
+
+    .hero .bar {
+      font-weight: 900;
+      letter-spacing: -0.094em;
+      margin-left: 0.018em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 640px;
+      font-size: 22px;
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .summary {
+      padding: 26px 28px 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(88, 102, 239, 0.12);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.88), transparent 46%),
+        linear-gradient(135deg, rgba(138, 145, 255, 0.12), rgba(88, 102, 239, 0.08));
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #536b90;
+    }
+
+    .summary p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #5f738a;
+    }
+
+    .section-label {
+      margin: 30px 0 18px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #7d8fa6;
+    }
+
+    .variants {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .variant {
+      position: relative;
+      overflow: hidden;
+      padding: 24px 24px 26px;
+      border-radius: 28px;
+      border: 1px solid rgba(25, 42, 62, 0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(248,251,255,0.80));
+      min-height: 330px;
+    }
+
+    .variant::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.86);
+    }
+
+    .variant h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .variant .copy {
+      margin: 0;
+      min-height: 84px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .mark {
+      margin: 36px 0 18px;
+      font-size: 76px;
+      line-height: 0.94;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .mark .flux,
+    .mark .bar {
+      display: inline-block;
+    }
+
+    .mark .flux {
+      font-weight: 500;
+    }
+
+    .mark .bar {
+      font-weight: 900;
+    }
+
+    .mark.v1 .flux { letter-spacing: -0.072em; }
+    .mark.v1 .bar  { letter-spacing: -0.076em; margin-left: 0.030em; }
+
+    .mark.v2 .flux { letter-spacing: -0.088em; }
+    .mark.v2 .bar  { letter-spacing: -0.094em; margin-left: 0.018em; }
+
+    .mark.v3 .flux { letter-spacing: -0.102em; }
+    .mark.v3 .bar  { letter-spacing: -0.112em; margin-left: 0.004em; }
+
+    .accent-line {
+      height: 4px;
+      width: 58%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-0), var(--accent-1));
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #60748b;
+    }
+
+    .meta strong {
+      color: var(--ink);
+    }
+
+    .recommended {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(22, 37, 56, 0.08);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .recommended strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1180px) {
+      .page { padding: 20px; }
+      .canvas { padding: 28px; }
+      .hero, .variants { grid-template-columns: 1fr; }
+      .hero h1 { white-space: normal; }
+      .mark { font-size: 62px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="canvas">
+      <p class="eyebrow">FluxBar Wordmark Refinement</p>
+
+      <section class="hero">
+        <div>
+          <h1><span class="flux">Flux</span><span class="bar">Bar</span></h1>
+          <p>你选了 <strong>B · Editorial Utility</strong>，所以这次只调字母间距。目标是保留成熟桌面工具的气质，同时把字标从“普通标题”往“品牌字标”再推一步。</p>
+        </div>
+
+        <aside class="summary">
+          <strong>What changes here</strong>
+          <p>这 3 版只改字距和连接节奏，不改整体方向。重点观察的是：整体是否更利落、是否更像品牌字标、以及 <code>Flux</code> 和 <code>Bar</code> 的重量关系是否更舒服。</p>
+        </aside>
+      </section>
+
+      <p class="section-label">Three Spacing Variants</p>
+
+      <section class="variants">
+        <article class="variant">
+          <h2>V1 · Looser Editorial</h2>
+          <p class="copy">字距收得较少，阅读最轻松，也最安全。但品牌感相对弱一点，更接近“漂亮标题”。</p>
+          <div class="mark v1"><span class="flux">Flux</span><span class="bar">Bar</span></div>
+          <div class="accent-line"></div>
+          <div class="meta"><strong>感觉：</strong>成熟、从容、偏保守。适合如果你担心太紧会失去高级感。</div>
+        </article>
+
+        <article class="variant">
+          <h2>V2 · Balanced Editorial</h2>
+          <p class="copy">整体更紧，但还保持呼吸感。`Flux` 和 `Bar` 的连接更自然，适合作为默认主方案。</p>
+          <div class="mark v2"><span class="flux">Flux</span><span class="bar">Bar</span></div>
+          <div class="accent-line"></div>
+          <div class="meta"><strong>感觉：</strong>最平衡，既像成熟软件，也有明显品牌意识。我最推荐这一版。</div>
+        </article>
+
+        <article class="variant">
+          <h2>V3 · Compressed Editorial</h2>
+          <p class="copy">字距压得最紧，品牌感最强，也最像真正定制过的字标。风险是会比前两版更强势。</p>
+          <div class="mark v3"><span class="flux">Flux</span><span class="bar">Bar</span></div>
+          <div class="accent-line"></div>
+          <div class="meta"><strong>感觉：</strong>更锋利、更现代。如果后续配色也更克制，这版会很有识别度。</div>
+        </article>
+      </section>
+
+      <p class="recommended"><strong>建议先看 V2。</strong> 如果你觉得它还不够有品牌感，就继续往 V3 走；如果你想更稳一点、更像专业桌面工具标题，就回到 V1。</p>
+    </main>
+  </div>
+</body>
+</html>

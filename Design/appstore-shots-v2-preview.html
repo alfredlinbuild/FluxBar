@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar App Store Screenshots v2</title>
+  <style>
+    :root {
+      --bg-1: #12171d;
+      --bg-2: #19212b;
+      --bg-3: #243242;
+      --panel: #242a31;
+      --panel-top: #2b333d;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --green: #34C759;
+      --yellow: #F5C451;
+      --orange: #F28C38;
+      --red: #FF5A5F;
+      --blue: #2E9BFF;
+      --refresh: #1877F2;
+      --button: #4a4b50;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #0f141a;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+
+    .page-title {
+      margin: 0 0 10px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .page-note {
+      margin: 0 0 24px;
+      color: rgba(245,247,249,0.68);
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 860px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 28px;
+    }
+
+    .shot-shell {
+      padding: 14px;
+      border-radius: 22px;
+      background: #161c24;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .shot-label {
+      margin: 0 0 10px;
+      color: rgba(245,247,249,0.82);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .shot {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(77,130,187,0.16), transparent 24%),
+        radial-gradient(circle at 84% 82%, rgba(52,199,89,0.10), transparent 26%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 46%, var(--bg-3) 100%);
+    }
+
+    .shot-content {
+      position: absolute;
+      inset: 0;
+      padding: 88px 92px 76px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: 60px;
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      max-width: 980px;
+    }
+
+    .subhead {
+      margin: 0;
+      color: rgba(245,247,249,0.70);
+      font-size: 24px;
+      line-height: 1.5;
+      max-width: 880px;
+    }
+
+    .popover {
+      margin-top: auto;
+      width: min(1180px, 100%);
+      border-radius: 36px;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 34px 70px rgba(0,0,0,0.34);
+    }
+
+    .titlebar {
+      height: 40px;
+      background: var(--panel-top);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 10px;
+    }
+
+    .traffic {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .red { background: #ff5f57; }
+    .yellow { background: #febc2e; }
+    .green { background: #28c840; }
+
+    .panel-body {
+      padding: 28px;
+    }
+
+    .brand {
+      font-family: "SF Pro Rounded", "SF Pro Display", sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin: 0 0 26px;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .cards-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .cards-2 + .cards-2,
+    .cards-2 + .trend-grid,
+    .trend-grid + .footerbar {
+      margin-top: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px 24px;
+      min-height: 166px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card.tall {
+      min-height: 214px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .metric-rows {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .arrow {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      width: 38px;
+    }
+
+    .value {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .thermal-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .green-text { color: var(--green); }
+    .yellow-text { color: var(--yellow); }
+    .orange-text { color: var(--orange); }
+    .red-text { color: var(--red); }
+
+    .metric-big {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 54px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-top: auto;
+    }
+
+    .trend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .trend-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px 24px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .trend-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .trend-line {
+      margin-top: auto;
+      height: 96px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .trend-line svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .footerbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 20px;
+      margin: 18px -28px -28px;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #f7f9fb;
+      background: var(--button);
+    }
+
+    .btn.primary {
+      background: var(--refresh);
+    }
+
+    .segmented {
+      margin-left: auto;
+      display: inline-flex;
+      background: rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 6px;
+      gap: 6px;
+    }
+
+    .seg {
+      min-width: 72px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: rgba(245,247,249,0.82);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .seg.active {
+      background: var(--refresh);
+      color: white;
+    }
+
+    .menubar {
+      width: min(1120px, 100%);
+      height: 72px;
+      border-radius: 22px;
+      margin-top: auto;
+      background: linear-gradient(180deg, rgba(207,233,255,0.94), rgba(185,220,247,0.86));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.86);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 36px;
+    }
+
+    .menubar-pill {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #233041;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .menu-metric {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .menu-small {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .callout-box {
+      position: absolute;
+      right: 92px;
+      top: 128px;
+      width: 330px;
+      padding: 20px 22px;
+      border-radius: 22px;
+      background: rgba(18,24,30,0.52);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .callout-title {
+      margin: 0 0 10px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .callout-text {
+      margin: 0;
+      color: rgba(245,247,249,0.70);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .thermal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .status-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px;
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="page-title">FluxBar App Store 产品图 v2</h1>
+  <p class="page-note">
+    这版改成了 HTML/CSS 真实布局流，避免 SVG 文字挤压问题，并且视觉语言尽量回到你当前 app：
+    深色 popover、圆角卡片、概览卡 + 趋势卡 + 固定底栏。下面是 6 张更接近实际上线风格的产品图草稿。
+  </p>
+
+  <div class="stack">
+    <section class="shot-shell">
+      <div class="shot-label">01 · 一眼掌握 Mac 状态</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">一眼掌握 Mac 状态</h2>
+          <p class="subhead">把网络、热状态、CPU、内存集中到同一个清晰面板里，快速了解系统当前运行情况。</p>
+          <div class="popover">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div class="brand">FluxBar</div>
+              <div class="section-title">Overview</div>
+              <div class="cards-2">
+                <div class="card tall">
+                  <div class="label">Network</div>
+                  <div class="metric-rows">
+                    <div class="metric-row"><span class="arrow">↑</span><span class="value">76</span><span class="unit">KB/s</span></div>
+                    <div class="metric-row"><span class="arrow">↓</span><span class="value">2</span><span class="unit">KB/s</span></div>
+                  </div>
+                  <div class="footnote">Total 78 KB/s</div>
+                </div>
+                <div class="card tall">
+                  <div class="label">Thermal State</div>
+                  <div class="thermal-word green-text">Chill</div>
+                  <div class="footnote">All good and easy</div>
+                </div>
+              </div>
+              <div class="cards-2">
+                <div class="card"><div class="label">CPU Usage</div><div class="metric-big">23%</div><div class="footnote">Rising to 23%</div></div>
+                <div class="card"><div class="label">Memory</div><div class="metric-big">16.38 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shot-shell">
+      <div class="shot-label">02 · 热状态更直观</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">热状态更直观</h2>
+          <p class="subhead">用简洁的状态词和清晰的颜色梯度，快速判断系统是否稳定、升温或需要冷却。</p>
+          <div class="popover" style="width:min(1260px,100%);">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div class="section-title">Thermal State</div>
+              <div class="thermal-grid">
+                <div class="status-card"><div class="label">Thermal State</div><div class="status-word green-text">Chill</div><div class="footnote">All good and easy</div></div>
+                <div class="status-card"><div class="label">Thermal State</div><div class="status-word yellow-text">Warming up</div><div class="footnote">Starting to feel warm</div></div>
+                <div class="status-card"><div class="label">Thermal State</div><div class="status-word orange-text">Hot and busy</div><div class="footnote">Heat is building up</div></div>
+                <div class="status-card"><div class="label">Thermal State</div><div class="status-word red-text">Overheating vibes</div><div class="footnote">Needs a cooldown</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shot-shell">
+      <div class="shot-label">03 · 网络与温度同屏查看</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">网络和温度，同屏清楚呈现</h2>
+          <p class="subhead">实时查看上传、下载和 CPU / GPU 温度，不用在多个工具之间来回切换。</p>
+          <div class="popover">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div class="brand">FluxBar</div>
+              <div class="section-title">Overview</div>
+              <div class="cards-2">
+                <div class="card tall">
+                  <div class="label">Network</div>
+                  <div class="metric-rows">
+                    <div class="metric-row"><span class="arrow">↑</span><span class="value">6</span><span class="unit">KB/s</span></div>
+                    <div class="metric-row"><span class="arrow">↓</span><span class="value">45</span><span class="unit">KB/s</span></div>
+                  </div>
+                  <div class="footnote">Total 51 KB/s</div>
+                </div>
+                <div class="card tall">
+                  <div class="label">Thermal State</div>
+                  <div class="thermal-word green-text">Chill</div>
+                  <div class="footnote">All good and easy</div>
+                </div>
+              </div>
+              <div class="cards-2">
+                <div class="card"><div class="label">CPU Temp</div><div class="metric-big">45°</div><div class="footnote">macmon</div></div>
+                <div class="card"><div class="label">GPU Temp</div><div class="metric-big">45°</div><div class="footnote">Thermal Nominal</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shot-shell">
+      <div class="shot-label">04 · 趋势变化一眼看懂</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">趋势变化，一眼看懂</h2>
+          <p class="subhead">CPU、内存、网络、温度趋势并列展示，用更短时间看清系统在过去几分钟里的变化。</p>
+          <div class="popover" style="width:min(1240px,100%);">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex;align-items:center;gap:20px;">
+                <div class="section-title" style="margin:0;">Trends</div>
+                <div class="segmented">
+                  <div class="seg">1m</div>
+                  <div class="seg active">5m</div>
+                  <div class="seg">30m</div>
+                </div>
+              </div>
+              <div class="trend-grid">
+                <div class="trend-card">
+                  <div class="label">CPU Usage</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:52px;">23%</div><div class="footnote">23%</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 78 C50 90, 75 50, 110 78 S170 86, 210 70 S270 72, 300 95 S360 40, 410 86 S470 80, 490 70" fill="none" stroke="#FF9E34" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="label">Memory</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:48px;">16.38 GB</div><div class="footnote">16.38 GB</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 50 C40 30, 70 90, 120 44 S200 84, 250 58 S320 76, 360 48 S430 92, 490 60" fill="none" stroke="#2E9BFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="label">Network</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:48px;color:var(--green);">2 KB/s</div><div class="footnote">2 KB/s</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 96 C60 92, 110 58, 150 84 S230 90, 290 70 S370 88, 420 64 S470 86, 490 76" fill="none" stroke="#34C759" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="label">Temperature</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:48px;color:var(--yellow);">39°</div><div class="footnote">39°</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 88 C60 80, 100 72, 160 74 S260 66, 320 58 S420 70, 490 64" fill="none" stroke="#F5C451" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shot-shell">
+      <div class="shot-label">05 · 固定底栏，操作更顺手</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">固定底栏，常用操作始终可见</h2>
+          <p class="subhead">不管内容滚动到哪里，刷新、导出、设置和退出都固定在底部，操作路径更稳定。</p>
+          <div class="popover">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div class="brand">FluxBar</div>
+              <div class="section-title">Overview</div>
+              <div class="cards-2">
+                <div class="card"><div class="label">CPU Usage</div><div class="metric-big">13%</div><div class="footnote">Rising to 13%</div></div>
+                <div class="card"><div class="label">Memory</div><div class="metric-big">16.38 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              </div>
+              <div class="trend-grid">
+                <div class="trend-card">
+                  <div class="label">CPU Usage</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:52px;">13%</div><div class="footnote">13%</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 76 C65 90, 90 42, 130 84 S220 78, 290 84 S360 56, 420 90 S470 74, 490 72" fill="none" stroke="#FF9E34" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="label">Memory</div>
+                  <div class="trend-top"><div class="metric-big" style="font-size:48px;">16.38 GB</div><div class="footnote">16.38 GB</div></div>
+                  <div class="trend-line">
+                    <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                      <path d="M10 44 C60 52, 120 88, 180 70 S250 84, 320 62 S390 86, 490 74" fill="none" stroke="#2E9BFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="footerbar">
+                <div class="btn-row">
+                  <div class="btn primary">↻ Refresh</div>
+                </div>
+                <div class="btn-row">
+                  <div class="btn">Export</div>
+                  <div class="btn">Settings</div>
+                  <div class="btn">Quit</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shot-shell">
+      <div class="shot-label">06 · Menubar 里随时查看</div>
+      <div class="shot">
+        <div class="shot-content">
+          <h2 class="headline">在 Menubar 里，随时查看关键状态</h2>
+          <p class="subhead">轻量显示当前网络和热状态，需要更多信息时再展开面板，不打断你的工作流。</p>
+          <div class="callout-box">
+            <h3 class="callout-title">轻量但完整</h3>
+            <p class="callout-text">状态栏提供快速概览，展开后再查看完整 Overview 与 Trends，适合日常常驻监控。</p>
+          </div>
+          <div class="menubar">
+            <div class="menubar-pill">
+              <span class="menu-metric">🌡 39°</span>
+              <span class="menu-metric menu-small">C</span>
+              <span class="menu-metric">13%</span>
+              <span class="menu-metric menu-small">M</span>
+              <span class="menu-metric">51%</span>
+              <span class="menu-metric">↑ 6</span>
+              <span class="menu-metric">↓ 45</span>
+            </div>
+          </div>
+          <div class="popover" style="width:min(920px,100%);margin-left:auto;">
+            <div class="titlebar">
+              <span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span>
+            </div>
+            <div class="panel-body">
+              <div class="brand">FluxBar</div>
+              <div class="cards-2">
+                <div class="card tall">
+                  <div class="label">Network</div>
+                  <div class="metric-rows">
+                    <div class="metric-row"><span class="arrow">↑</span><span class="value">6</span><span class="unit">KB/s</span></div>
+                    <div class="metric-row"><span class="arrow">↓</span><span class="value">45</span><span class="unit">KB/s</span></div>
+                  </div>
+                  <div class="footnote">Total 51 KB/s</div>
+                </div>
+                <div class="card tall">
+                  <div class="label">Thermal State</div>
+                  <div class="thermal-word green-text">Chill</div>
+                  <div class="footnote">All good and easy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

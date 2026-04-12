@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar 可切换状态卡方案</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --green: #34C759;
+      --blue: #4DA3FF;
+      --purple: #B183FF;
+      --pink: #FF7AB8;
+      --yellow: #F5C451;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1420px;
+      margin: 0 auto;
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 0 0 18px;
+      max-width: 920px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .answer {
+      margin: 0 0 22px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(245,247,249,0.82);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sidebar {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 24px;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+
+    .sidebar ol {
+      margin: 0;
+      padding-left: 20px;
+      color: rgba(245,247,249,0.78);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .sidebar p {
+      margin: 14px 0 0;
+      color: rgba(245,247,249,0.60);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .stage {
+      padding: 18px;
+      border-radius: 30px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.28);
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 214px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .metric-rows {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .arrow {
+      width: 38px;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+    }
+
+    .value {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .green { color: var(--green); }
+    .blue { color: var(--blue); }
+    .purple { color: var(--purple); }
+    .pink { color: var(--pink); }
+    .yellow { color: var(--yellow); }
+
+    .picker {
+      display: inline-flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 6px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .pill {
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(245,247,249,0.82);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .pill.active {
+      background: #1877F2;
+      color: white;
+    }
+
+    .spec {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .spec-item {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .spec-item h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .spec-item p {
+      margin: 0;
+      color: rgba(245,247,249,0.60);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1180px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .spec { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .overview { grid-template-columns: 1fr; }
+      .spec { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">Overview 可切换状态卡方案</h1>
+    <p class="subhead">
+      这块区域可以做成“可替换状态卡位”，但不建议做完全开放的自由内容区。更合理的方向是提供有限模式，
+      保持同一张卡的结构一致：顶部小标题、中间主状态、底部脚注说明。
+    </p>
+    <div class="answer">
+      <strong>哪个更精确？</strong> 这种界面预览里，<strong>HTML + CSS 更精确</strong>。因为它是基于真实布局流的渲染，
+      会处理字号、换行、间距、对齐和响应式约束；单纯“HTML 网页”其实离不开 CSS，真正精确的是两者一起。
+      比起手工画 SVG 或概念图，更接近后面落到 SwiftUI 的真实结果。
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>建议的模式</h2>
+        <ol>
+          <li><strong>Thermal</strong>：默认模式，最符合 FluxBar 定位。</li>
+          <li><strong>Weather</strong>：最适合第一批扩展，既有趣也有用。</li>
+          <li><strong>Focus</strong>：偏氛围型，适合工作状态展示。</li>
+          <li><strong>Mood</strong>：可以做，但更像个性化装饰，建议排后。</li>
+        </ol>
+        <p>
+          设计原则：不管切换成什么内容，这张卡都应保持同一张卡片系统里的成员，而不是变成一个风格跳脱的小挂件。
+        </p>
+      </aside>
+
+      <section class="stack">
+        <article class="module">
+          <h2 class="module-title">方案定义</h2>
+          <p class="module-note">
+            把现在的 <code>Thermal State</code> 改成 <code>Spotlight Card</code>。
+            用户可以在设置里切换卡片模式，但每种模式沿用同一套结构和高度，避免破坏 Overview 的平衡。
+          </p>
+          <div class="picker">
+            <span class="pill active">Thermal</span>
+            <span class="pill">Weather</span>
+            <span class="pill">Focus</span>
+            <span class="pill">Mood</span>
+          </div>
+          <div class="spec">
+            <div class="spec-item">
+              <h3>Thermal</h3>
+              <p>保留系统监控主定位，最稳妥，也是默认值。</p>
+            </div>
+            <div class="spec-item">
+              <h3>Weather</h3>
+              <p>最值得先做的一种有趣扩展，属于“环境信息”，不违和。</p>
+            </div>
+            <div class="spec-item">
+              <h3>Focus</h3>
+              <p>展示当前工作状态或一句短状态词，偏 productivity。</p>
+            </div>
+            <div class="spec-item">
+              <h3>Mood</h3>
+              <p>更个性化，但离系统工具更远，建议做成后续可选项。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="module">
+          <h2 class="module-title">效果预览</h2>
+          <p class="module-note">
+            左侧网络卡保持不变，右侧用相同结构展示不同模式。这样最容易判断“有趣”是否会破坏整体产品感。
+          </p>
+
+          <div class="stage">
+            <div class="overview">
+              <div class="card">
+                <div class="label">Network</div>
+                <div class="metric-rows">
+                  <div class="metric-row">
+                    <span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span>
+                  </div>
+                </div>
+                <div class="footnote">Total 84 KB/s</div>
+              </div>
+
+              <div class="card">
+                <div class="label">Thermal State</div>
+                <div class="status-word green">Chill</div>
+                <div class="footnote">All good and easy</div>
+              </div>
+
+              <div class="card">
+                <div class="label">Weather</div>
+                <div class="status-word blue">23° Sunny</div>
+                <div class="footnote">Clear and bright outside</div>
+              </div>
+
+              <div class="card">
+                <div class="label">Focus</div>
+                <div class="status-word purple">Deep Work</div>
+                <div class="footnote">Protected time for building</div>
+              </div>
+
+              <div class="card">
+                <div class="label">Mood</div>
+                <div class="status-word pink">Calm</div>
+                <div class="footnote">Steady pace, clear head</div>
+              </div>
+
+              <div class="card">
+                <div class="label">Weather Alert</div>
+                <div class="status-word yellow">Light Rain</div>
+                <div class="footnote">Bring an umbrella later</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="module">
+          <h2 class="module-title">结论</h2>
+          <p class="module-note">
+            如果你想让这块区域“更有趣但不跑偏”，最适合的第一版是：
+            <strong>Thermal / Weather</strong> 两种模式。它们都属于“状态信息”，和 FluxBar 的工具属性兼容度最高。
+            <strong>Focus</strong> 可以作为第二阶段；<strong>Mood</strong> 更适合放到更个性化的版本里。
+          </p>
+        </article>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

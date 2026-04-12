@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Thermal Type Match Preview</title>
+  <style>
+    :root {
+      --bg: #1f232a;
+      --card: #242120;
+      --border: rgba(255,255,255,0.03);
+      --text: #f2f4f7;
+      --muted: rgba(242,244,247,0.62);
+      --cool: #11d7f2;
+      --cool-soft: rgba(17,215,242,0.84);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: linear-gradient(180deg, #20252c 0%, #1b1f25 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1260px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 18px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .note {
+      margin: 0;
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 24px;
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .panel p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(242,244,247,0.5);
+    }
+
+    .card {
+      min-height: 242px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 26px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      color: var(--cool);
+      margin: 0;
+      font-family: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+    }
+
+    .sub {
+      margin: 12px 0 0;
+      font-family: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--cool-soft);
+      line-height: 1.1;
+    }
+
+    .foot {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 24px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(242,244,247,0.46);
+    }
+
+    .v1 .hero { font-size: 20px; }
+    .v1 .sub { font-size: 16px; max-width: 240px; }
+
+    .v2 .hero { font-size: 22px; }
+    .v2 .sub { font-size: 16px; max-width: 220px; }
+
+    .v3 .hero { font-size: 22px; }
+    .v3 .sub { font-size: 16px; max-width: 220px; }
+    .v3 .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1 class="title">Thermal State Type Match</h1>
+      <p class="note">
+        Left network card uses three main text tiers: caption at roughly 12pt, rounded value at 22pt bold, and rounded unit at 16pt semibold.
+        These options test matching the thermal card to that same rhythm.
+      </p>
+    </header>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>V1 · Current Proportion</h2>
+        <p>Reference for comparison. Main word stays smaller, so it still feels lighter than the network card.</p>
+        <div class="card v1">
+          <div class="eyebrow">Thermal State</div>
+          <h3 class="hero">Chill</h3>
+          <p class="sub">All good and easy</p>
+          <div class="foot">20pt rounded title · 16pt secondary</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>V2 · Direct Match</h2>
+        <p>Main word is lifted to the same 22pt rounded bold scale as the network values. Secondary line stays at 16pt rounded semibold.</p>
+        <div class="card v2">
+          <div class="eyebrow">Thermal State</div>
+          <h3 class="hero">Chill</h3>
+          <p class="sub">All good and easy</p>
+          <div class="foot">22pt rounded title · 16pt rounded secondary</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>V3 · Match + Shorter Copy</h2>
+        <p>Same type scale as V2, but with a tighter supporting line. This usually feels more balanced inside the fixed card height.</p>
+        <div class="card v3">
+          <div class="eyebrow">Thermal State</div>
+          <div class="stack">
+            <h3 class="hero">Chill</h3>
+            <p class="sub">Running cool</p>
+          </div>
+          <div class="foot">22pt rounded title · 16pt rounded secondary</div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

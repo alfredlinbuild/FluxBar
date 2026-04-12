@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Settings Preview</title>
+  <style>
+    :root {
+      --bg-1: #dfe9f4;
+      --bg-2: #f7fbff;
+      --ink: #2e3947;
+      --muted: #6f7d8f;
+      --line: rgba(60, 74, 91, 0.09);
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-solid: rgba(255, 255, 255, 0.92);
+      --shadow: 0 24px 60px rgba(54, 73, 96, 0.18);
+      --blue: #1e87ff;
+      --cyan: #16b7ff;
+      --orange: #ff9731;
+      --green: #1fb973;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "SF Pro Display", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.92), rgba(255,255,255,0) 34%),
+        linear-gradient(160deg, #dce8f6 0%, #edf4fb 46%, #f9fcff 100%);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .window {
+      width: 1040px;
+      border-radius: 28px;
+      background: rgba(249, 252, 255, 0.72);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(28px);
+    }
+
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      background: rgba(255,255,255,0.38);
+      border-bottom: 1px solid rgba(57, 73, 92, 0.08);
+    }
+
+    .traffic {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.65);
+    }
+
+    .dot.red { background: #ff5f57; }
+    .dot.yellow { background: #febc2e; }
+    .dot.green { background: #28c840; }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 22px;
+      padding: 22px;
+    }
+
+    .sidebar,
+    .preview {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.66);
+      border-radius: 24px;
+      backdrop-filter: blur(18px);
+    }
+
+    .sidebar {
+      padding: 20px;
+    }
+
+    .section + .section {
+      margin-top: 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7f8da0;
+    }
+
+    .settings-card {
+      background: var(--panel-solid);
+      border-radius: 20px;
+      border: 1px solid rgba(59, 76, 95, 0.06);
+      overflow: hidden;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      padding: 16px 18px;
+      align-items: center;
+    }
+
+    .row + .row {
+      border-top: 1px solid var(--line);
+    }
+
+    .row-title {
+      font-size: 15px;
+      font-weight: 650;
+      margin-bottom: 4px;
+    }
+
+    .row-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 245px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #edf3fa;
+      font-size: 13px;
+      font-weight: 700;
+      color: #45607f;
+    }
+
+    .switch {
+      width: 52px;
+      height: 31px;
+      border-radius: 999px;
+      background: rgba(50, 84, 123, 0.16);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 2px 8px rgba(41,54,72,0.16);
+    }
+
+    .switch.on {
+      background: linear-gradient(180deg, #2f95ff 0%, #197cff 100%);
+    }
+
+    .switch.on::after {
+      left: 24px;
+    }
+
+    .preview {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .preview-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,250,255,0.82));
+      border-radius: 18px;
+      border: 1px solid rgba(60, 77, 98, 0.06);
+    }
+
+    .preview-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7f8da0;
+      margin-bottom: 6px;
+    }
+
+    .menubar-pill {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 330px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(190,232,255,0.94), rgba(180,224,250,0.88));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .temp {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 750;
+      font-size: 17px;
+      color: #193451;
+    }
+
+    .thermo {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .meters {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #1d3550;
+    }
+
+    .meter {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meter-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      font-size: 8px;
+      line-height: 0.82;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .meter-bar {
+      width: 11px;
+      height: 23px;
+      border-radius: 999px;
+      background: rgba(31, 57, 91, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      border-radius: 999px;
+    }
+
+    .meter-fill.cpu {
+      height: 8px;
+      background: var(--orange);
+    }
+
+    .meter-fill.mem {
+      height: 13px;
+      background: #2a95ff;
+    }
+
+    .network-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-weight: 700;
+      color: #1d3550;
+    }
+
+    .network-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 2px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.88);
+      border-radius: 18px;
+      border: 1px solid rgba(55, 72, 91, 0.06);
+      padding: 15px 16px;
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card.tall {
+      min-height: 128px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 13px;
+      color: #7a8796;
+      font-weight: 700;
+    }
+
+    .card .value {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .card .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .thermal {
+      color: var(--green);
+    }
+
+    .mini-note {
+      font-size: 12px;
+      color: #7c8897;
+      line-height: 1.45;
+    }
+
+    .legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.88);
+      color: #66788f;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="traffic">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="title">FluxBar Settings</div>
+    </div>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <section class="section">
+          <h2>Menu Bar Content</h2>
+          <div class="settings-card">
+            <div class="row">
+              <div>
+                <div class="row-title">Mode</div>
+                <div class="row-note">Choose how compact FluxBar should stay in the menu bar.</div>
+              </div>
+              <div class="chip">Automatic</div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="row-title">Show temperature</div>
+                <div class="row-note">Adds the thermometer icon and live temperature readout.</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="row-title">Show network</div>
+                <div class="row-note">Shows upload and download speed in the menu bar preview.</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="row-title">Show memory</div>
+                <div class="row-note">Turns the memory meter on or off.</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="row-title">Show CPU usage</div>
+                <div class="row-note">Adds the CPU meter next to memory.</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Drop-down Panel</h2>
+          <div class="settings-card">
+            <div class="row">
+              <div>
+                <div class="row-title">Show Status</div>
+                <div class="row-note">Displays the system status block in the panel.</div>
+              </div>
+              <div class="switch"></div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="row-title">Show Top Processes</div>
+                <div class="row-note">Displays the process list below Trends.</div>
+              </div>
+              <div class="switch"></div>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="preview">
+        <div>
+          <div class="preview-title">Live Preview</div>
+          <div class="preview-bar">
+            <div class="menubar-pill">
+              <div class="temp">
+                <span class="thermo">🌡︎</span>
+                <span>51°</span>
+              </div>
+
+              <div class="meters">
+                <div class="meter">
+                  <div class="meter-label"><span>C</span><span>P</span><span>U</span></div>
+                  <div class="meter-bar"><div class="meter-fill cpu"></div></div>
+                </div>
+                <div class="meter">
+                  <div class="meter-label"><span>M</span><span>E</span><span>M</span></div>
+                  <div class="meter-bar"><div class="meter-fill mem"></div></div>
+                </div>
+              </div>
+
+              <div class="network-stack">
+                <div class="network-line"><span>↑</span><span>68K</span></div>
+                <div class="network-line"><span>↓</span><span>2K</span></div>
+              </div>
+            </div>
+
+            <div class="legend">
+              <span class="swatch" style="background:#16b7ff;"></span>
+              Changes update this preview immediately
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-grid">
+          <div class="card tall">
+            <h3>Network</h3>
+            <div class="value">↑ 68 KB/s<br>↓ 2 KB/s</div>
+            <div class="sub">Total 70 KB/s</div>
+          </div>
+
+          <div class="card tall">
+            <h3>Thermal State</h3>
+            <div class="value thermal">Chill</div>
+            <div class="mini-note">All good and easy</div>
+          </div>
+
+          <div class="card">
+            <h3>CPU Usage</h3>
+            <div class="value">22%</div>
+            <div class="sub">Falling to 22%</div>
+          </div>
+
+          <div class="card">
+            <h3>Memory</h3>
+            <div class="value">16.89 GB / 32 GB</div>
+            <div class="sub">Normal</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Wordmark Demo</title>
+  <style>
+    :root {
+      --ink: #16263a;
+      --muted: #66788d;
+      --line: rgba(27, 48, 72, 0.14);
+      --paper: rgba(252, 254, 255, 0.72);
+      --accent: #4a73ff;
+      --accent-soft: #5bd4f1;
+      --accent-violet: #6a63f7;
+      --warm: #ff8f45;
+      --bg-0: #eff5fb;
+      --bg-1: #dfe9f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 18%, rgba(255,255,255,0.95), transparent 22%),
+        radial-gradient(circle at 88% 14%, rgba(90, 152, 255, 0.16), transparent 18%),
+        radial-gradient(circle at 82% 82%, rgba(101, 90, 240, 0.14), transparent 20%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    .page {
+      min-height: 100%;
+      padding: 48px;
+    }
+
+    .canvas {
+      min-height: calc(100vh - 96px);
+      padding: 56px;
+      border: 1px solid var(--line);
+      border-radius: 36px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.78), rgba(247,251,255,0.62)),
+        var(--paper);
+      box-shadow:
+        0 22px 60px rgba(22, 38, 58, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.78);
+      backdrop-filter: blur(20px);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #7890aa;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 48px;
+      align-items: end;
+      padding-bottom: 52px;
+      border-bottom: 1px solid rgba(22, 38, 58, 0.08);
+    }
+
+    .hero-copy {
+      max-width: 760px;
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      font-size: clamp(68px, 10vw, 138px);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      font-weight: 650;
+      text-transform: lowercase;
+    }
+
+    .hero h1 .bar {
+      font-weight: 900;
+      margin-left: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 620px;
+      font-size: 22px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .hero-meta {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+      padding: 28px 28px 22px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.86), transparent 48%),
+        linear-gradient(135deg, rgba(78, 211, 241, 0.16), rgba(87, 108, 255, 0.12));
+      border: 1px solid rgba(74, 115, 255, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-meta::after {
+      content: "";
+      position: absolute;
+      inset: auto -24px -24px auto;
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(91, 212, 241, 0.38), rgba(74, 115, 255, 0.14));
+      filter: blur(4px);
+    }
+
+    .meta-kicker {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #57739a;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #30507b;
+    }
+
+    .meta-item span {
+      display: block;
+      font-size: 19px;
+      line-height: 1.45;
+      color: #5f7288;
+    }
+
+    .divider {
+      margin: 42px 0 24px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #7d90a8;
+    }
+
+    .specimens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .specimen {
+      padding: 26px 24px 24px;
+      border-radius: 28px;
+      border: 1px solid rgba(25, 44, 67, 0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,251,255,0.76));
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .specimen::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.8);
+    }
+
+    .specimen h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .specimen p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .mark {
+      margin: 38px 0 18px;
+      font-size: 76px;
+      line-height: 0.95;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .mark .flux,
+    .mark .bar {
+      display: inline-block;
+    }
+
+    .mark-a {
+      letter-spacing: -0.095em;
+      text-transform: lowercase;
+    }
+
+    .mark-a .flux {
+      font-weight: 650;
+    }
+
+    .mark-a .bar {
+      font-weight: 900;
+      margin-left: -0.05em;
+    }
+
+    .mark-b {
+      letter-spacing: -0.085em;
+    }
+
+    .mark-b .flux {
+      font-weight: 500;
+    }
+
+    .mark-b .bar {
+      font-weight: 900;
+      margin-left: 0.02em;
+    }
+
+    .mark-c {
+      letter-spacing: -0.092em;
+      text-transform: lowercase;
+      font-feature-settings: "ss01" 1;
+    }
+
+    .mark-c .flux {
+      font-weight: 850;
+    }
+
+    .mark-c .bar {
+      font-weight: 700;
+      margin-left: -0.02em;
+    }
+
+    .accent-line {
+      width: 62%;
+      height: 8px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .accent-a {
+      background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    }
+
+    .accent-b {
+      height: 4px;
+      background: linear-gradient(90deg, #8892ff, var(--accent-violet));
+    }
+
+    .accent-c {
+      background: linear-gradient(90deg, #6edbd7, #5e6cf8);
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(22, 38, 58, 0.08);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .footer-note strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1100px) {
+      .page { padding: 24px; }
+      .canvas { padding: 28px; }
+      .hero,
+      .specimens {
+        grid-template-columns: 1fr;
+      }
+      .hero-meta {
+        min-height: auto;
+      }
+      .mark {
+        font-size: 58px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="canvas">
+      <p class="eyebrow">FluxBar Brand Direction</p>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <h1><span class="flux">flux</span><span class="bar">bar</span></h1>
+          <p>这次直接用 HTML 设计页来做字标示例，不再走静态导出。核心方向是把它从“普通 App 标题”变成更像桌面工具品牌的字标。</p>
+        </div>
+
+        <aside class="hero-meta">
+          <p class="meta-kicker">Preferred Direction</p>
+          <div class="meta-list">
+            <div class="meta-item">
+              <strong>Lowercase</strong>
+              <span>更现代，也更像 menubar 工具品牌，而不是系统设置页标题。</span>
+            </div>
+            <div class="meta-item">
+              <strong>Weight Contrast</strong>
+              <span><code>flux</code> 稍轻，<code>bar</code> 更重，用结构做记忆点，不靠拼色。</span>
+            </div>
+            <div class="meta-item">
+              <strong>Tighter Rhythm</strong>
+              <span>更紧的字距和更压缩的视觉重心，会比现在更利落、更有品牌感。</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <p class="divider">Specimens</p>
+
+      <section class="specimens">
+        <article class="specimen">
+          <h2>A · Geometric Tech</h2>
+          <p>最现代，适合做主方向。整体更几何，收得更紧，结尾更有力量。</p>
+          <div class="mark mark-a"><span class="flux">flux</span><span class="bar">bar</span></div>
+          <div class="accent-line accent-a"></div>
+          <p>关键词：geometric / compressed / strong finish</p>
+        </article>
+
+        <article class="specimen">
+          <h2>B · Editorial Utility</h2>
+          <p>更像成熟软件品牌，保留大小写，整体更克制、更高级。</p>
+          <div class="mark mark-b"><span class="flux">Flux</span><span class="bar">Bar</span></div>
+          <div class="accent-line accent-b"></div>
+          <p>关键词：premium utility / editorial / contrast-driven</p>
+        </article>
+
+        <article class="specimen">
+          <h2>C · Soft Futuristic</h2>
+          <p>更柔和一些，但仍然比默认系统标题更有个性和未来感。</p>
+          <div class="mark mark-c"><span class="flux">flux</span><span class="bar">bar</span></div>
+          <div class="accent-line accent-c"></div>
+          <p>关键词：rounded geometry / friendlier / modern desktop brand</p>
+        </article>
+      </section>
+
+      <p class="footer-note"><strong>建议优先看 A。</strong> 如果你觉得 A 太硬，就往 C 调；如果你想更成熟、更像专业桌面工具，就往 B 调。你选一个方向，我再只沿着那个方向继续细化，不再发泛方案。</p>
+    </main>
+  </div>
+</body>
+</html>

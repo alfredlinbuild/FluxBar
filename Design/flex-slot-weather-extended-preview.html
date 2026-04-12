@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Weather Extended Preview</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --sun: #F5C451;
+      --cloud: #8FA8C3;
+      --rain: #4DA3FF;
+      --snow: #BFE8FF;
+      --heavy: #2E86FF;
+      --storm: #6D78B8;
+      --typhoon: #5B8FA1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 0 0 22px;
+      max-width: 980px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 214px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      margin: auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .temp {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .swatch {
+      margin-top: 10px;
+      color: rgba(245,247,249,0.50);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 1180px) {
+      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">Weather 扩展状态图标方案</h1>
+    <p class="subhead">
+      这版是在 `Sunny / Cloudy / Rainy` 的基础上，继续补充 `Snow / Heavy Rain / Thunderstorm / Typhoon`。
+      目标不是做完整天气 App，而是验证哪些天气状态适合放进同一个灵活卡位系统里。
+    </p>
+
+    <section class="module">
+      <h2 class="module-title">Extended Weather Slot Preview</h2>
+      <p class="module-note">
+        这里延续同一结构：顶部标题、中间图标 + 温度、底部脚注。你可以重点看：
+        这些扩展状态是否和前面的基础状态同属一套语言，以及是否会显得过多。
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="label">Weather</div>
+          <div class="hero">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M20 38C13.4 38 8 32.6 8 26C8 19.8 12.7 14.7 18.7 14.1C20.8 8.2 26.3 4 32.8 4C40.8 4 47.3 10.4 47.5 18.4C52.8 19.3 56.8 23.9 56.8 29.4C56.8 35.5 51.9 40.4 45.8 40.4H20V38Z" fill="var(--cloud)"/>
+                <g stroke="var(--snow)" stroke-width="3.5" stroke-linecap="round">
+                  <line x1="22" y1="46" x2="22" y2="56"/><line x1="17" y1="51" x2="27" y2="51"/>
+                  <line x1="34" y1="46" x2="34" y2="58"/><line x1="28" y1="52" x2="40" y2="52"/>
+                  <line x1="46" y1="46" x2="46" y2="56"/><line x1="41" y1="51" x2="51" y2="51"/>
+                </g>
+              </svg>
+            </div>
+            <div class="temp">2°</div>
+          </div>
+          <div class="footnote">Cold air and quiet streets</div>
+          <div class="swatch">Snow · #BFE8FF</div>
+        </div>
+
+        <div class="card">
+          <div class="label">Weather</div>
+          <div class="hero">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M20 36C13.4 36 8 30.6 8 24C8 17.8 12.7 12.7 18.7 12.1C20.8 6.2 26.3 2 32.8 2C40.8 2 47.3 8.4 47.5 16.4C52.8 17.3 56.8 21.9 56.8 27.4C56.8 33.5 51.9 38.4 45.8 38.4H20V36Z" fill="var(--cloud)"/>
+                <g stroke="var(--heavy)" stroke-width="4.5" stroke-linecap="round">
+                  <line x1="18" y1="44" x2="14" y2="58"/>
+                  <line x1="28" y1="44" x2="24" y2="60"/>
+                  <line x1="38" y1="44" x2="34" y2="58"/>
+                  <line x1="48" y1="44" x2="44" y2="60"/>
+                </g>
+              </svg>
+            </div>
+            <div class="temp">14°</div>
+          </div>
+          <div class="footnote">Steady rain through the day</div>
+          <div class="swatch">Heavy Rain · #2E86FF</div>
+        </div>
+
+        <div class="card">
+          <div class="label">Weather</div>
+          <div class="hero">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M20 36C13.4 36 8 30.6 8 24C8 17.8 12.7 12.7 18.7 12.1C20.8 6.2 26.3 2 32.8 2C40.8 2 47.3 8.4 47.5 16.4C52.8 17.3 56.8 21.9 56.8 27.4C56.8 33.5 51.9 38.4 45.8 38.4H20V36Z" fill="var(--storm)"/>
+                <path d="M32 42L26 54H34L30 62L46 46H36L40 42H32Z" fill="var(--yellow)"/>
+                <g stroke="var(--rain)" stroke-width="3.5" stroke-linecap="round">
+                  <line x1="18" y1="44" x2="16" y2="54"/>
+                  <line x1="48" y1="44" x2="46" y2="54"/>
+                </g>
+              </svg>
+            </div>
+            <div class="temp">13°</div>
+          </div>
+          <div class="footnote">Thunder clouds and sharp bursts</div>
+          <div class="swatch">Thunderstorm · #6D78B8</div>
+        </div>
+
+        <div class="card">
+          <div class="label">Weather</div>
+          <div class="hero">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M32 10C20 10 10 20 10 32C10 44 20 54 32 54C44 54 54 44 54 32C54 20 44 10 32 10Z" stroke="var(--typhoon)" stroke-width="4"/>
+                <path d="M20 31C23 23 31 20 38 22C34 22 30 25 29 29C28 34 31 38 36 39C42 40 47 37 49 31C49 40 42 48 33 48C24 48 17 41 17 32C17 31 17 31 17 30C18 31 19 31 20 31Z" fill="var(--typhoon)"/>
+              </svg>
+            </div>
+            <div class="temp">26°</div>
+          </div>
+          <div class="footnote">Strong winds and unstable air</div>
+          <div class="swatch">Typhoon · #5B8FA1</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

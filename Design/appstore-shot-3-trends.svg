@@ -1,0 +1,79 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1600" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10151B"/>
+      <stop offset="0.5" stop-color="#1A2029"/>
+      <stop offset="1" stop-color="#1F2C38"/>
+    </linearGradient>
+    <filter id="shadow3" x="0" y="0" width="1600" height="1200" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="36" stdDeviation="38" flood-color="#04070C" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg3)"/>
+  <circle cx="1260" cy="980" r="300" fill="#2E7DFF" fill-opacity="0.12"/>
+  <circle cx="260" cy="210" r="240" fill="#34C759" fill-opacity="0.10"/>
+
+  <text x="116" y="180" fill="#F5F7FB" font-family="SF Pro Display, PingFang SC, sans-serif" font-size="78" font-weight="760" letter-spacing="-2.2">
+    趋势和操作同屏可见
+  </text>
+  <text x="118" y="250" fill="rgba(245,247,251,0.68)" font-family="SF Pro Text, PingFang SC, sans-serif" font-size="28" font-weight="500">
+    查看实时变化，也能在固定底栏快速刷新、导出和进入设置。
+  </text>
+
+  <g filter="url(#shadow3)">
+    <rect x="150" y="320" width="1300" height="760" rx="42" fill="#252A31" stroke="rgba(255,255,255,0.09)"/>
+    <rect x="150" y="320" width="1300" height="42" rx="42" fill="#2C333D"/>
+    <circle cx="190" cy="341" r="8" fill="#FF5F57"/>
+    <circle cx="214" cy="341" r="8" fill="#FEBC2E"/>
+    <circle cx="238" cy="341" r="8" fill="#28C840"/>
+
+    <text x="220" y="430" fill="#F4F6F8" font-family="SF Pro Display, sans-serif" font-size="40" font-weight="780">Trends</text>
+    <g transform="translate(1030 388)">
+      <rect width="220" height="56" rx="18" fill="#3A3F47"/>
+      <rect x="74" y="6" width="72" height="44" rx="14" fill="#1877F2"/>
+      <text x="36" y="36" fill="#F5F7F8" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="600">1m</text>
+      <text x="100" y="36" fill="#F5F7F8" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="700">5m</text>
+      <text x="170" y="36" fill="#F5F7F8" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="600">30m</text>
+    </g>
+
+    <g>
+      <rect x="220" y="500" width="470" height="260" rx="28" fill="#1F2022"/>
+      <text x="255" y="560" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">CPU Usage</text>
+      <text x="255" y="645" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="60" font-weight="700">23%</text>
+      <path d="M255 710 C320 760, 365 650, 430 700 S540 740, 620 690 S700 735, 660 790" stroke="#FF9E34" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g>
+      <rect x="760" y="500" width="470" height="260" rx="28" fill="#1F2022"/>
+      <text x="795" y="560" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Memory</text>
+      <text x="795" y="645" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="56" font-weight="700">16.38 GB</text>
+      <path d="M795 750 C845 650, 880 790, 940 690 S1060 760, 1120 690 S1190 720, 1200 760" stroke="#2E9BFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g>
+      <rect x="220" y="790" width="470" height="170" rx="28" fill="#1F2022"/>
+      <text x="255" y="850" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Network</text>
+      <text x="255" y="930" fill="#34C759" font-family="SF Pro Rounded, sans-serif" font-size="54" font-weight="700">2 KB/s</text>
+    </g>
+
+    <g>
+      <rect x="760" y="790" width="470" height="170" rx="28" fill="#1F2022"/>
+      <text x="795" y="850" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Temperature</text>
+      <text x="795" y="930" fill="#F5C451" font-family="SF Pro Rounded, sans-serif" font-size="54" font-weight="700">39°</text>
+    </g>
+
+    <g>
+      <rect x="190" y="982" width="1220" height="74" rx="24" fill="#313236" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="224" y="996" width="240" height="46" rx="16" fill="#1877F2"/>
+      <text x="272" y="1028" fill="#F8FAFC" font-family="SF Pro Display, sans-serif" font-size="26" font-weight="700">↻ Refresh</text>
+
+      <rect x="632" y="996" width="182" height="46" rx="16" fill="#4A4B50"/>
+      <rect x="846" y="996" width="212" height="46" rx="16" fill="#4A4B50"/>
+      <rect x="1090" y="996" width="150" height="46" rx="16" fill="#4A4B50"/>
+      <text x="680" y="1028" fill="#F1F3F5" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="650">Export</text>
+      <text x="905" y="1028" fill="#F1F3F5" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="650">Settings</text>
+      <text x="1148" y="1028" fill="#F1F3F5" font-family="SF Pro Display, sans-serif" font-size="24" font-weight="650">Quit</text>
+    </g>
+  </g>
+</svg>

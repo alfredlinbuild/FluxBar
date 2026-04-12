@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Top-Left Match Preview</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --green: #34C759;
+      --purple: #8B7CFF;
+      --yellow: #F5C451;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap { max-width: 1320px; margin: 0 auto; }
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .subhead {
+      margin: 0 0 22px;
+      max-width: 980px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .stage {
+      padding: 18px;
+      border-radius: 30px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.28);
+    }
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 214px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .switcher {
+      position: relative;
+      align-self: flex-start;
+      margin-bottom: 18px;
+    }
+    .switcher-button {
+      min-width: 0;
+      height: auto;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .switcher-button:hover {
+      color: rgba(245,247,249,0.82);
+    }
+    .caret {
+      font-size: 14px;
+      opacity: 0.75;
+      transform: translateY(1px);
+    }
+    .switcher-menu {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      min-width: 146px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(30,34,39,0.98);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.34);
+      display: none;
+      z-index: 5;
+    }
+    .switcher.open .switcher-menu { display: block; }
+    .option {
+      width: 100%;
+      min-height: 36px;
+      border-radius: 10px;
+      padding: 0 12px;
+      border: none;
+      background: transparent;
+      color: rgba(245,247,249,0.84);
+      font-size: 14px;
+      font-weight: 650;
+      text-align: left;
+      cursor: pointer;
+    }
+    .option:hover, .option.active { background: rgba(255,255,255,0.08); }
+    .metric-rows { display: grid; gap: 12px; }
+    .metric-row { display: flex; align-items: baseline; gap: 10px; }
+    .arrow {
+      width: 38px;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+    }
+    .value {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+    .unit {
+      color: var(--muted);
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 54px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+    .hero {
+      margin: auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .icon {
+      width: 64px;
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+    .icon svg { width: 100%; height: 100%; display: block; }
+    .temp {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--text);
+    }
+    .green { color: var(--green); }
+    .purple { color: var(--purple); }
+    @media (max-width: 980px) {
+      .overview { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">左上角入口 · 与 Network 标题同规格</h1>
+    <p class="subhead">
+      这版把左上角模式入口的字号、字重、颜色都拉到和左侧 `Network` 标题一致。你可以重点看：这样做会不会更统一，还是会显得太像普通标题。
+    </p>
+
+    <section class="module">
+      <h2 class="module-title">Top-Left Trigger Match</h2>
+      <p class="module-note">
+        这里入口不再像按钮，而是直接把它当成卡片标题来处理，只在后面加一个很轻的下拉符号。
+      </p>
+
+      <div class="stage">
+        <div class="overview">
+          <div class="card">
+            <div class="label">Network</div>
+            <div class="metric-rows">
+              <div class="metric-row"><span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span></div>
+              <div class="metric-row"><span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span></div>
+            </div>
+            <div class="footnote">Total 84 KB/s</div>
+          </div>
+
+          <div class="card" id="flex-card">
+            <div class="switcher" id="slot-switcher">
+              <div class="switcher-button" id="switcher-button">
+                <span id="mode-label">Thermal</span>
+                <span class="caret">▾</span>
+              </div>
+              <div class="switcher-menu">
+                <button class="option active" data-mode="thermal">Thermal</button>
+                <button class="option" data-mode="weather">Weather</button>
+                <button class="option" data-mode="focus">Focus</button>
+              </div>
+            </div>
+
+            <div id="slot-body"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="thermal-template">
+    <div class="status-word green">Chill</div>
+    <div class="footnote">All good and easy</div>
+  </template>
+
+  <template id="focus-template">
+    <div class="status-word purple">Deep Work</div>
+    <div class="footnote">Protected time for building</div>
+  </template>
+
+  <template id="weather-template">
+    <div class="hero">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="12" fill="var(--yellow)"/>
+          <g stroke="var(--yellow)" stroke-width="3.5" stroke-linecap="round">
+            <line x1="32" y1="8" x2="32" y2="16"/><line x1="32" y1="48" x2="32" y2="56"/>
+            <line x1="8" y1="32" x2="16" y2="32"/><line x1="48" y1="32" x2="56" y2="32"/>
+            <line x1="14" y1="14" x2="19" y2="19"/><line x1="45" y1="45" x2="50" y2="50"/>
+            <line x1="14" y1="50" x2="19" y2="45"/><line x1="45" y1="19" x2="50" y2="14"/>
+          </g>
+        </svg>
+      </div>
+      <div class="temp">23°</div>
+    </div>
+    <div class="footnote">Clear and bright outside</div>
+  </template>
+
+  <script>
+    const slotBody = document.getElementById('slot-body');
+    const modeLabel = document.getElementById('mode-label');
+    const switcher = document.getElementById('slot-switcher');
+    const switcherButton = document.getElementById('switcher-button');
+    const options = document.querySelectorAll('.option');
+
+    const config = {
+      thermal: { trigger: 'Thermal', template: 'thermal-template' },
+      weather: { trigger: 'Weather', template: 'weather-template' },
+      focus: { trigger: 'Focus', template: 'focus-template' }
+    };
+
+    function renderMode(mode) {
+      const entry = config[mode];
+      const template = document.getElementById(entry.template);
+      modeLabel.textContent = entry.trigger;
+      slotBody.innerHTML = '';
+      slotBody.appendChild(template.content.cloneNode(true));
+      options.forEach(option => {
+        option.classList.toggle('active', option.dataset.mode === mode);
+      });
+      switcher.classList.remove('open');
+    }
+
+    switcherButton.addEventListener('click', () => {
+      switcher.classList.toggle('open');
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', () => renderMode(option.dataset.mode));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!switcher.contains(event.target)) {
+        switcher.classList.remove('open');
+      }
+    });
+
+    renderMode('thermal');
+  </script>
+</body>
+</html>

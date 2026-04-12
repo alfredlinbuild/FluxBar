@@ -1,0 +1,76 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1600" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10151D"/>
+      <stop offset="0.55" stop-color="#182230"/>
+      <stop offset="1" stop-color="#233243"/>
+    </linearGradient>
+    <linearGradient id="panelGlow" x1="300" y1="140" x2="1350" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B4561" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#13202C" stop-opacity="0.18"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1600" height="1200" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="40" stdDeviation="40" flood-color="#04070C" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg1)"/>
+  <circle cx="1350" cy="180" r="260" fill="#2E7DFF" fill-opacity="0.18"/>
+  <circle cx="220" cy="1010" r="320" fill="#34C759" fill-opacity="0.12"/>
+  <rect x="40" y="40" width="1520" height="1120" rx="44" fill="url(#panelGlow)" stroke="rgba(255,255,255,0.06)"/>
+
+  <text x="116" y="180" fill="#F5F7FB" font-family="SF Pro Display, PingFang SC, sans-serif" font-size="78" font-weight="760" letter-spacing="-2.2">
+    一眼掌握 Mac 状态
+  </text>
+  <text x="118" y="250" fill="rgba(245,247,251,0.68)" font-family="SF Pro Text, PingFang SC, sans-serif" font-size="28" font-weight="500">
+    从网络、温度、CPU 到内存，重要信息集中在同一面板里。
+  </text>
+
+  <g filter="url(#shadow)">
+    <rect x="150" y="320" width="1300" height="760" rx="42" fill="#252A31" stroke="rgba(255,255,255,0.09)"/>
+    <rect x="150" y="320" width="1300" height="42" rx="42" fill="#2C333D"/>
+    <circle cx="190" cy="341" r="8" fill="#FF5F57"/>
+    <circle cx="214" cy="341" r="8" fill="#FEBC2E"/>
+    <circle cx="238" cy="341" r="8" fill="#28C840"/>
+
+    <text x="215" y="420" fill="#F6F7F8" font-family="SF Pro Display, sans-serif" font-size="42" font-weight="780">FluxBar</text>
+    <text x="215" y="505" fill="#F4F6F8" font-family="SF Pro Display, PingFang SC, sans-serif" font-size="36" font-weight="760">Overview</text>
+
+    <g>
+      <rect x="215" y="545" width="470" height="210" rx="28" fill="#1F2022"/>
+      <text x="250" y="605" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Network</text>
+      <text x="250" y="690" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="64" font-weight="700">↑ 76</text>
+      <text x="470" y="690" fill="rgba(255,255,255,0.62)" font-family="SF Pro Rounded, sans-serif" font-size="40" font-weight="700">KB/s</text>
+      <text x="250" y="765" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="64" font-weight="700">↓ 2</text>
+      <text x="430" y="765" fill="rgba(255,255,255,0.62)" font-family="SF Pro Rounded, sans-serif" font-size="40" font-weight="700">KB/s</text>
+      <text x="250" y="820" fill="rgba(255,255,255,0.50)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Total 78 KB/s</text>
+    </g>
+
+    <g>
+      <rect x="720" y="545" width="470" height="210" rx="28" fill="#1F2022"/>
+      <text x="755" y="605" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Thermal State</text>
+      <text x="955" y="695" text-anchor="middle" fill="#34C759" font-family="SF Pro Rounded, sans-serif" font-size="64" font-weight="700">Chill</text>
+      <text x="755" y="820" fill="rgba(255,255,255,0.50)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">All good and easy</text>
+    </g>
+
+    <g>
+      <rect x="215" y="785" width="470" height="150" rx="28" fill="#1F2022"/>
+      <text x="250" y="845" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">CPU Usage</text>
+      <text x="250" y="930" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="60" font-weight="700">23%</text>
+    </g>
+
+    <g>
+      <rect x="720" y="785" width="470" height="150" rx="28" fill="#1F2022"/>
+      <text x="755" y="845" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="24" font-weight="600">Memory</text>
+      <text x="755" y="930" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="54" font-weight="700">16.38 GB / 32 GB</text>
+    </g>
+
+    <g opacity="0.95">
+      <rect x="1225" y="545" width="170" height="390" rx="28" fill="#1F2022"/>
+      <text x="1260" y="605" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="22" font-weight="600">CPU Temp</text>
+      <text x="1260" y="695" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="56" font-weight="700">39°</text>
+      <text x="1260" y="790" fill="rgba(255,255,255,0.65)" font-family="SF Pro Text, sans-serif" font-size="22" font-weight="600">GPU Temp</text>
+      <text x="1260" y="880" fill="#F5F7F9" font-family="SF Pro Rounded, sans-serif" font-size="56" font-weight="700">39°</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Lime Title Comparison</title>
+  <style>
+    :root {
+      --lime: #D1DE6B;
+      --ink: #162538;
+      --muted: #66788d;
+      --line: rgba(22, 37, 56, 0.10);
+      --paper: rgba(250, 252, 255, 0.88);
+      --bg-0: #eef4fa;
+      --bg-1: #e0e9f3;
+      --panel-dark: #161616;
+      --panel-text: #C8D3E8;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.92), transparent 24%),
+        radial-gradient(circle at 84% 18%, rgba(209,222,107,0.16), transparent 18%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    .page {
+      min-height: 100%;
+      padding: 40px;
+    }
+
+    .board {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 36px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.84), rgba(247,251,255,0.74)),
+        var(--paper);
+      box-shadow:
+        0 22px 60px rgba(20, 36, 56, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.84);
+      backdrop-filter: blur(18px);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #75879d;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 26px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 0.95;
+      color: var(--ink);
+    }
+
+    .intro p {
+      margin: 12px 0 0;
+      max-width: 720px;
+      font-size: 20px;
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .source {
+      padding: 20px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(22, 37, 56, 0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(243,248,252,0.88));
+    }
+
+    .source strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #536b90;
+    }
+
+    .source span {
+      display: block;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #61758c;
+    }
+
+    .specimens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .specimen {
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(22, 37, 56, 0.09);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,251,255,0.80));
+    }
+
+    .mock {
+      min-height: 235px;
+      padding: 26px;
+      background:
+        radial-gradient(circle at 0% 52%, rgba(216,233,251,0.92), transparent 30%),
+        radial-gradient(circle at 100% 56%, rgba(216,233,251,0.92), transparent 30%),
+        linear-gradient(180deg, var(--panel-dark), #000000);
+      color: var(--panel-text);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      margin: 0;
+      font-size: 30px;
+      line-height: 0.96;
+      white-space: nowrap;
+    }
+
+    .brand .flux {
+      font-weight: 500;
+      letter-spacing: -0.072em;
+    }
+
+    .brand .bar {
+      font-weight: 900;
+      letter-spacing: -0.076em;
+      margin-left: 0.03em;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      max-width: 280px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(200,211,232,0.86);
+    }
+
+    .accent {
+      width: 154px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--lime);
+      box-shadow: 0 0 22px rgba(209,222,107,0.25);
+    }
+
+    .caption {
+      padding: 22px 22px 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(248,251,255,0.78));
+    }
+
+    .caption h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .caption p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(209,222,107,0.14);
+      color: #4E5D17;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .full-lime .brand {
+      color: var(--lime);
+    }
+
+    .split-lime .brand .flux {
+      color: var(--panel-text);
+    }
+
+    .split-lime .brand .bar {
+      color: var(--lime);
+    }
+
+    .accent-only .brand {
+      color: var(--panel-text);
+    }
+
+    .recommend {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(22, 37, 56, 0.08);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .recommend strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1100px) {
+      .page { padding: 18px; }
+      .board { padding: 22px; }
+      .intro, .specimens { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="board">
+      <p class="eyebrow">Lime Usage Comparison</p>
+
+      <section class="intro">
+        <div>
+          <h1>标题里怎么用 <code>#D1DE6B</code> 更合适</h1>
+          <p>这页只比较 3 种用法：标题整串 lime、只给 <code>Bar</code> 用 lime、以及标题保持冷色文字而让 lime 只做强调线。这样能直接判断它在品牌标题里的角色是否合适。</p>
+        </div>
+
+        <aside class="source">
+          <strong>Exact Color</strong>
+          <span><code>#D1DE6B</code> 来自官方 hero 图片取样。它本身是高亮荧绿，更接近能量色 / 点缀色，而不是稳定的品牌文字色。</span>
+        </aside>
+      </section>
+
+      <section class="specimens">
+        <article class="specimen full-lime">
+          <div class="mock">
+            <div>
+              <h2 class="brand"><span class="flux">Flux</span><span class="bar">Bar</span></h2>
+              <p class="subtitle">A lightweight monitor for load, heat, and activity.</p>
+            </div>
+            <div class="accent"></div>
+          </div>
+          <div class="caption">
+            <h2>1 · 全标题用 Lime</h2>
+            <p>最抢眼，但也最不稳。它更像产品高亮、警示或运动能量色，不像耐看的品牌文字色。</p>
+            <span class="tag">too loud</span>
+          </div>
+        </article>
+
+        <article class="specimen split-lime">
+          <div class="mock">
+            <div>
+              <h2 class="brand"><span class="flux">Flux</span><span class="bar">Bar</span></h2>
+              <p class="subtitle">A lightweight monitor for load, heat, and activity.</p>
+            </div>
+            <div class="accent"></div>
+          </div>
+          <div class="caption">
+            <h2>2 · 只给 Bar 用 Lime</h2>
+            <p>比整串更克制，但 `Flux` / `Bar` 颜色分裂感会比较强，容易重新回到“拼色品牌名”的问题。</p>
+            <span class="tag">possible but jumpy</span>
+          </div>
+        </article>
+
+        <article class="specimen accent-only">
+          <div class="mock">
+            <div>
+              <h2 class="brand"><span class="flux">Flux</span><span class="bar">Bar</span></h2>
+              <p class="subtitle">A lightweight monitor for load, heat, and activity.</p>
+            </div>
+            <div class="accent"></div>
+          </div>
+          <div class="caption">
+            <h2>3 · 标题冷色，Lime 做点缀</h2>
+            <p>最稳。标题保留品牌感和可读性，lime 作为强调线出现，既保留你喜欢的颜色，又不会让标题显得俗或发飘。</p>
+            <span class="tag">recommended</span>
+          </div>
+        </article>
+      </section>
+
+      <p class="recommend"><strong>我的建议还是第 3 种。</strong> 如果你真的想让 lime 进入标题，第 2 种还能讨论；但如果目标是成熟、耐看、像产品品牌字标，第 3 种明显更合理。</p>
+    </main>
+  </div>
+</body>
+</html>

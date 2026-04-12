@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar 六卡结构可替换卡位预览</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --green: #34C759;
+      --blue: #4DA3FF;
+      --purple: #B183FF;
+      --pink: #FF7AB8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 0 0 22px;
+      max-width: 960px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .answer {
+      margin: 0 0 22px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(245,247,249,0.82);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .picker {
+      display: inline-flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 6px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(245,247,249,0.82);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .pill.active {
+      background: #1877F2;
+      color: white;
+    }
+
+    .shots {
+      display: grid;
+      gap: 18px;
+    }
+
+    .shot {
+      padding: 18px;
+      border-radius: 30px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.28);
+    }
+
+    .shot-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 760;
+      color: rgba(245,247,249,0.82);
+      letter-spacing: 0.01em;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 166px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card.tall {
+      min-height: 214px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .metric-rows {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .arrow {
+      width: 38px;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+    }
+
+    .value {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .green { color: var(--green); }
+    .blue { color: var(--blue); }
+    .purple { color: var(--purple); }
+    .pink { color: var(--pink); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .overview { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">Overview 保持六个区域，只替换右上角卡位</h1>
+    <p class="subhead">
+      这次按你的真实意思处理：Overview 仍然固定是 6 个区域，不增加任何新区域。
+      只把现在右上角原本的 <code>Thermal State</code> 位置改成一个可切换内容的灵活卡位。
+    </p>
+    <div class="answer">
+      也就是说：<strong>位置不变、大小不变、仍然占 1 个格子</strong>，只允许里面的内容模式切换。
+      这是比“新增区域”更成熟的做法，因为不会打乱你现在已经成型的 Overview 节奏。
+    </div>
+
+    <div class="stack">
+      <section class="module">
+        <h2 class="module-title">建议的卡位模式</h2>
+        <p class="module-note">
+          建议把这块位置定义成一个 <strong>Flexible Status Slot</strong>。第一阶段最值得做的是
+          <strong>Thermal</strong> 和 <strong>Weather</strong>；<strong>Focus</strong>、<strong>Mood</strong> 可以作为后续可选项。
+        </p>
+        <div class="picker">
+          <span class="pill active">Thermal</span>
+          <span class="pill">Weather</span>
+          <span class="pill">Focus</span>
+          <span class="pill">Mood</span>
+        </div>
+      </section>
+
+      <section class="module">
+        <h2 class="module-title">效果预览</h2>
+        <p class="module-note">
+          下面四个画面里，Overview 都还是六个区域。唯一变化的是右上角卡位显示什么内容。
+        </p>
+
+        <div class="grid-2">
+          <div class="shot">
+            <div class="shot-title">Mode A · Thermal</div>
+            <div class="overview">
+              <div class="card tall">
+                <div class="label">Network</div>
+                <div class="metric-rows">
+                  <div class="metric-row"><span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span></div>
+                  <div class="metric-row"><span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span></div>
+                </div>
+                <div class="footnote">Total 84 KB/s</div>
+              </div>
+              <div class="card tall">
+                <div class="label">Thermal State</div>
+                <div class="status-word green">Chill</div>
+                <div class="footnote">All good and easy</div>
+              </div>
+              <div class="card"><div class="label">CPU Usage</div><div class="value" style="font-size:56px;">23%</div><div class="footnote">Falling to 23%</div></div>
+              <div class="card"><div class="label">Memory</div><div class="value" style="font-size:54px;">17.55 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              <div class="card"><div class="label">CPU Temp</div><div class="value" style="font-size:56px;">61°</div><div class="footnote">macmon</div></div>
+              <div class="card"><div class="label">GPU Temp</div><div class="value" style="font-size:56px;">60°</div><div class="footnote">Thermal Nominal</div></div>
+            </div>
+          </div>
+
+          <div class="shot">
+            <div class="shot-title">Mode B · Weather</div>
+            <div class="overview">
+              <div class="card tall">
+                <div class="label">Network</div>
+                <div class="metric-rows">
+                  <div class="metric-row"><span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span></div>
+                  <div class="metric-row"><span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span></div>
+                </div>
+                <div class="footnote">Total 84 KB/s</div>
+              </div>
+              <div class="card tall">
+                <div class="label">Weather</div>
+                <div class="status-word blue">23° Sunny</div>
+                <div class="footnote">Clear and bright outside</div>
+              </div>
+              <div class="card"><div class="label">CPU Usage</div><div class="value" style="font-size:56px;">23%</div><div class="footnote">Falling to 23%</div></div>
+              <div class="card"><div class="label">Memory</div><div class="value" style="font-size:54px;">17.55 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              <div class="card"><div class="label">CPU Temp</div><div class="value" style="font-size:56px;">61°</div><div class="footnote">macmon</div></div>
+              <div class="card"><div class="label">GPU Temp</div><div class="value" style="font-size:56px;">60°</div><div class="footnote">Thermal Nominal</div></div>
+            </div>
+          </div>
+
+          <div class="shot">
+            <div class="shot-title">Mode C · Focus</div>
+            <div class="overview">
+              <div class="card tall">
+                <div class="label">Network</div>
+                <div class="metric-rows">
+                  <div class="metric-row"><span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span></div>
+                  <div class="metric-row"><span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span></div>
+                </div>
+                <div class="footnote">Total 84 KB/s</div>
+              </div>
+              <div class="card tall">
+                <div class="label">Focus</div>
+                <div class="status-word purple">Deep Work</div>
+                <div class="footnote">Protected time for building</div>
+              </div>
+              <div class="card"><div class="label">CPU Usage</div><div class="value" style="font-size:56px;">23%</div><div class="footnote">Falling to 23%</div></div>
+              <div class="card"><div class="label">Memory</div><div class="value" style="font-size:54px;">17.55 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              <div class="card"><div class="label">CPU Temp</div><div class="value" style="font-size:56px;">61°</div><div class="footnote">macmon</div></div>
+              <div class="card"><div class="label">GPU Temp</div><div class="value" style="font-size:56px;">60°</div><div class="footnote">Thermal Nominal</div></div>
+            </div>
+          </div>
+
+          <div class="shot">
+            <div class="shot-title">Mode D · Mood</div>
+            <div class="overview">
+              <div class="card tall">
+                <div class="label">Network</div>
+                <div class="metric-rows">
+                  <div class="metric-row"><span class="arrow">↑</span><span class="value">69</span><span class="unit">KB/s</span></div>
+                  <div class="metric-row"><span class="arrow">↓</span><span class="value">15</span><span class="unit">KB/s</span></div>
+                </div>
+                <div class="footnote">Total 84 KB/s</div>
+              </div>
+              <div class="card tall">
+                <div class="label">Mood</div>
+                <div class="status-word pink">Calm</div>
+                <div class="footnote">Steady pace, clear head</div>
+              </div>
+              <div class="card"><div class="label">CPU Usage</div><div class="value" style="font-size:56px;">23%</div><div class="footnote">Falling to 23%</div></div>
+              <div class="card"><div class="label">Memory</div><div class="value" style="font-size:54px;">17.55 GB / 32 GB</div><div class="footnote">Normal</div></div>
+              <div class="card"><div class="label">CPU Temp</div><div class="value" style="font-size:56px;">61°</div><div class="footnote">macmon</div></div>
+              <div class="card"><div class="label">GPU Temp</div><div class="value" style="font-size:56px;">60°</div><div class="footnote">Thermal Nominal</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="module">
+        <h2 class="module-title">设计判断</h2>
+        <p class="module-note">
+          如果要兼顾 “有趣” 和 “不破坏 FluxBar 的工具定位”，最适合先做的是
+          <strong>Thermal / Weather</strong> 两种模式。它们都属于环境与状态信息，放在这个卡位里最自然。
+          <strong>Focus</strong> 可以作为第二阶段可选项；<strong>Mood</strong> 最有个性，但也最容易削弱工具属性。
+        </p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

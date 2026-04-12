@@ -1,0 +1,74 @@
+<svg width="1600" height="1040" viewBox="0 0 1600 1040" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="1040" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EDF4FB"/>
+      <stop offset="1" stop-color="#E4EDF7"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#243244" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .h1 { font: 700 54px -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif; }
+      .h2 { font: 600 22px -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif; }
+      .body { font: 500 19px -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif; }
+      .small { font: 600 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif; letter-spacing: 0.2px; }
+      .wordmarkSoft { font: 700 74px -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "PingFang SC", sans-serif; letter-spacing: -1px; }
+      .wordmarkRefinedA { font: 600 74px -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif; letter-spacing: -1.4px; }
+      .wordmarkRefinedB { font: 900 74px -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif; letter-spacing: -1.6px; }
+      .wordmarkUtility { font: 700 72px -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif; letter-spacing: -1.8px; }
+      .wordmarkUtilityStrong { font: 800 72px -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif; letter-spacing: -1.8px; }
+      .wordmarkCurrent { font: 700 74px -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "PingFang SC", sans-serif; letter-spacing: 0px; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1040" fill="url(#bg)"/>
+
+  <text x="96" y="110" fill="#162436" class="h1">FluxBar 字体方向</text>
+  <text x="96" y="154" fill="#617286" class="body">这次只看字形、字重、字距和品牌气质，不比较颜色。目标是把它从“普通标题”变成“产品字标”。</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="220" width="680" height="330" rx="30" fill="#F7FAFD"/>
+    <text x="112" y="282" fill="#2B3A4C" class="h2">当前方向</text>
+    <text x="112" y="318" fill="#7B8CA0" class="body">系统圆角粗体，安全，但辨识度低，太像默认 section title。</text>
+
+    <text x="112" y="430" fill="#243244" class="wordmarkCurrent">FluxBar</text>
+
+    <rect x="112" y="470" width="156" height="10" rx="5" fill="#D6E1EC"/>
+    <text x="112" y="516" fill="#5D6D80" class="small">特征：圆、稳、默认感强</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="840" y="220" width="680" height="330" rx="30" fill="#F7FAFD"/>
+    <text x="872" y="282" fill="#2B3A4C" class="h2">方案 A · Refined Tech</text>
+    <text x="872" y="318" fill="#7B8CA0" class="body">我最推荐。Flux 用 Semibold，Bar 用 Black，靠字重而不是颜色建立节奏。</text>
+
+    <text x="872" y="430" fill="#243244" class="wordmarkRefinedA">Flux</text>
+    <text x="1034" y="430" fill="#243244" class="wordmarkRefinedB">Bar</text>
+
+    <rect x="872" y="470" width="190" height="10" rx="5" fill="#CAD9E8"/>
+    <text x="872" y="516" fill="#5D6D80" class="small">特征：更像产品名，克制但有记忆点</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="610" width="680" height="330" rx="30" fill="#F7FAFD"/>
+    <text x="112" y="672" fill="#2B3A4C" class="h2">方案 B · Soft Utility</text>
+    <text x="112" y="708" fill="#7B8CA0" class="body">保留少量圆角友好感，但收紧字距，让它不那么像默认 UI 字体。</text>
+
+    <text x="112" y="820" fill="#243244" class="wordmarkSoft">FluxBar</text>
+
+    <rect x="112" y="860" width="166" height="10" rx="5" fill="#D6E1EC"/>
+    <text x="112" y="906" fill="#5D6D80" class="small">特征：温和、亲和，但品牌锋芒稍弱</text>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="840" y="610" width="680" height="330" rx="30" fill="#F7FAFD"/>
+    <text x="872" y="672" fill="#2B3A4C" class="h2">方案 C · Crisp Utility</text>
+    <text x="872" y="708" fill="#7B8CA0" class="body">更偏专业监控工具，字形更硬朗，适合想强化“系统工具感”的方向。</text>
+
+    <text x="872" y="820" fill="#243244" class="wordmarkUtility">Flux</text>
+    <text x="1018" y="820" fill="#243244" class="wordmarkUtilityStrong">Bar</text>
+
+    <rect x="872" y="860" width="178" height="10" rx="5" fill="#CAD9E8"/>
+    <text x="872" y="906" fill="#5D6D80" class="small">特征：干净、利落，但比方案 A 更硬</text>
+  </g>
+</svg>

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Thermal State Symbol Preview</title>
+  <style>
+    :root {
+      --bg: #1e2329;
+      --card: #242120;
+      --card-edge: rgba(255,255,255,0.035);
+      --text: #f3f5f7;
+      --muted: rgba(243,245,247,0.62);
+      --soft: rgba(243,245,247,0.46);
+      --cool: #34C759;
+      --warm: #F5C451;
+      --hot: #F28C38;
+      --critical: #FF5A5F;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(44,61,84,0.28), transparent 30%),
+        linear-gradient(180deg, #21262d 0%, #1a1f25 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .note {
+      margin: 0 0 24px;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .group {
+      margin-bottom: 26px;
+    }
+
+    .group-title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      min-height: 232px;
+      background: var(--card);
+      border: 1px solid var(--card-edge);
+      border-radius: 28px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .state-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .state {
+      margin: 0;
+      font-family: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+    }
+
+    .foot {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--soft);
+      line-height: 1.2;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+
+    .mark {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    .mark.cool::before {
+      border: 1.5px solid rgba(52,199,89,0.4);
+    }
+
+    .mark.cool::after {
+      inset: 5px;
+      background: var(--cool);
+    }
+
+    .mark.warm::before {
+      border: 1.5px solid rgba(245,196,81,0.4);
+    }
+
+    .mark.warm::after {
+      inset: 5px;
+      background: var(--warm);
+    }
+
+    .mark.hot::before {
+      border: 1.5px solid rgba(242,140,56,0.42);
+    }
+
+    .mark.hot::after {
+      inset: 4px;
+      background: var(--hot);
+    }
+
+    .mark.critical::before {
+      border: 1.5px solid rgba(255,90,95,0.45);
+    }
+
+    .mark.critical::after {
+      inset: 4px;
+      background: var(--critical);
+    }
+
+    .cool { color: var(--cool); }
+    .warm { color: var(--warm); }
+    .hot { color: var(--hot); }
+    .critical { color: var(--critical); }
+
+    .pill.cool { color: var(--cool); border-color: rgba(52,199,89,0.24); background: rgba(52,199,89,0.08); }
+    .pill.warm { color: var(--warm); border-color: rgba(245,196,81,0.24); background: rgba(245,196,81,0.08); }
+    .pill.hot { color: var(--hot); border-color: rgba(242,140,56,0.24); background: rgba(242,140,56,0.08); }
+    .pill.critical { color: var(--critical); border-color: rgba(255,90,95,0.24); background: rgba(255,90,95,0.08); }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="title">Thermal State Symbol Directions</h1>
+    <p class="note">
+      These options avoid emoji and only add very light symbols beside the status word.
+      The goal is to add a bit more character without turning the card into a playful sticker or breaking the rest of the dashboard.
+    </p>
+
+    <section class="group">
+      <h2 class="group-title">A · Colored Dot</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="dot" style="background:var(--cool);"></span><h3 class="state cool">Chill</h3></div></div>
+          <div class="foot">All good and easy</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="dot" style="background:var(--warm);"></span><h3 class="state warm">Warming up</h3></div></div>
+          <div class="foot">Starting to feel warm</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="dot" style="background:var(--hot);"></span><h3 class="state hot">Hot and busy</h3></div></div>
+          <div class="foot">Heat is building up</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="dot" style="background:var(--critical);"></span><h3 class="state critical">Overheating vibes</h3></div></div>
+          <div class="foot">Needs a cooldown</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-title">B · Status Pill</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="pill cool">OK</span><h3 class="state cool">Chill</h3></div></div>
+          <div class="foot">All good and easy</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="pill warm">UP</span><h3 class="state warm">Warming up</h3></div></div>
+          <div class="foot">Starting to feel warm</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="pill hot">HOT</span><h3 class="state hot">Hot and busy</h3></div></div>
+          <div class="foot">Heat is building up</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="pill critical">MAX</span><h3 class="state critical">Overheating vibes</h3></div></div>
+          <div class="foot">Needs a cooldown</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-title">C · Soft Ring Mark</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="mark cool"></span><h3 class="state cool">Chill</h3></div></div>
+          <div class="foot">All good and easy</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="mark warm"></span><h3 class="state warm">Warming up</h3></div></div>
+          <div class="foot">Starting to feel warm</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="mark hot"></span><h3 class="state hot">Hot and busy</h3></div></div>
+          <div class="foot">Heat is building up</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><div class="state-wrap"><span class="mark critical"></span><h3 class="state critical">Overheating vibes</h3></div></div>
+          <div class="foot">Needs a cooldown</div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

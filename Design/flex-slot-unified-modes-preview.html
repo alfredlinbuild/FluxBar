@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Flexible Slot Unified Preview</title>
+  <style>
+    :root {
+      --bg-1: #151a20;
+      --bg-2: #1d242c;
+      --bg-3: #253140;
+      --panel: #252a31;
+      --card: #1f2022;
+      --card-border: rgba(255,255,255,0.04);
+      --text: #f5f7f9;
+      --muted: rgba(245,247,249,0.64);
+      --soft: rgba(245,247,249,0.48);
+      --green: #34C759;
+      --yellow: #F5C451;
+      --orange: #F28C38;
+      --red: #FF5A5F;
+      --blue: #4DA3FF;
+      --cloud: #8FA8C3;
+      --snow: #CBE8FF;
+      --storm: #7B87C7;
+      --purple: #8B7CFF;
+      --focus-green: #72CDA7;
+      --stone: #A58E7A;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(71,118,178,0.18), transparent 24%),
+        radial-gradient(circle at 80% 84%, rgba(52,199,89,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 0 0 22px;
+      max-width: 980px;
+      color: rgba(245,247,249,0.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .answer {
+      margin: 0 0 22px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(245,247,249,0.82);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .module {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .module-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .module-note {
+      margin: 0 0 14px;
+      color: rgba(245,247,249,0.62);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .section {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .section h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      min-height: 214px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .status-word {
+      margin: auto 0;
+      text-align: center;
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 54px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .footnote {
+      margin-top: auto;
+      color: var(--soft);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .hero {
+      margin: auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .temp {
+      font-family: "SF Pro Rounded", sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .green { color: var(--green); }
+    .yellow { color: var(--yellow); }
+    .orange { color: var(--orange); }
+    .red { color: var(--red); }
+    .blue { color: var(--blue); }
+    .purple { color: var(--purple); }
+    .focus-green { color: var(--focus-green); }
+    .stone { color: var(--stone); }
+
+    @media (max-width: 1220px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="headline">Flexible Slot · Thermal / Focus / Weather 总览</h1>
+    <p class="subhead">
+      这页把右上角灵活卡位的三种方向统一放在一起。结构保持一致，只变化内容模式，方便你比较哪类最适合 FluxBar，
+      以及哪一类适合作为第一版先上线。
+    </p>
+    <div class="answer">
+      当前设计判断：
+      <strong>Thermal</strong> 是默认值，最符合产品定位；
+      <strong>Weather</strong> 是最自然、最有趣的第一批扩展；
+      <strong>Focus</strong> 适合作为第二阶段个性化模式。
+    </div>
+
+    <div class="stack">
+      <section class="module">
+        <h2 class="module-title">统一结构</h2>
+        <p class="module-note">
+          不管切到哪种模式，都保持同一张卡的结构：顶部小标题，中间主内容，底部脚注。这样右上角这张卡会“灵活”，但不会破坏 Overview 的整体秩序。
+        </p>
+      </section>
+
+      <section class="module">
+        <h2 class="module-title">三种模式横向对比</h2>
+        <p class="module-note">
+          Thermal 看系统状态，Focus 看工作状态，Weather 看环境信息。你可以重点比较三者的气质和信息密度是否协调。
+        </p>
+
+        <div class="grid">
+          <section class="section">
+            <h3>Thermal</h3>
+            <div class="cards">
+              <div class="card">
+                <div class="label">Thermal State</div>
+                <div class="status-word green">Chill</div>
+                <div class="footnote">All good and easy</div>
+              </div>
+              <div class="card">
+                <div class="label">Thermal State</div>
+                <div class="status-word yellow">Warming up</div>
+                <div class="footnote">Starting to feel warm</div>
+              </div>
+              <div class="card">
+                <div class="label">Thermal State</div>
+                <div class="status-word orange">Hot and busy</div>
+                <div class="footnote">Heat is building up</div>
+              </div>
+              <div class="card">
+                <div class="label">Thermal State</div>
+                <div class="status-word red">Overheating vibes</div>
+                <div class="footnote">Needs a cooldown</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>Focus</h3>
+            <div class="cards">
+              <div class="card">
+                <div class="label">Focus</div>
+                <div class="status-word purple">Deep Work</div>
+                <div class="footnote">Protected time for building</div>
+              </div>
+              <div class="card">
+                <div class="label">Focus</div>
+                <div class="status-word blue">Flow</div>
+                <div class="footnote">Smooth pace, steady output</div>
+              </div>
+              <div class="card">
+                <div class="label">Focus</div>
+                <div class="status-word focus-green">Planning</div>
+                <div class="footnote">Thinking before making moves</div>
+              </div>
+              <div class="card">
+                <div class="label">Focus</div>
+                <div class="status-word stone">Offline</div>
+                <div class="footnote">Quiet mode, low interruption</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>Weather</h3>
+            <div class="cards">
+              <div class="card">
+                <div class="label">Weather</div>
+                <div class="hero">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                      <circle cx="32" cy="32" r="12" fill="var(--yellow)"/>
+                      <g stroke="var(--yellow)" stroke-width="3.5" stroke-linecap="round">
+                        <line x1="32" y1="8" x2="32" y2="16"/><line x1="32" y1="48" x2="32" y2="56"/>
+                        <line x1="8" y1="32" x2="16" y2="32"/><line x1="48" y1="32" x2="56" y2="32"/>
+                        <line x1="14" y1="14" x2="19" y2="19"/><line x1="45" y1="45" x2="50" y2="50"/>
+                        <line x1="14" y1="50" x2="19" y2="45"/><line x1="45" y1="19" x2="50" y2="14"/>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="temp">23°</div>
+                </div>
+                <div class="footnote">Clear and bright outside</div>
+              </div>
+              <div class="card">
+                <div class="label">Weather</div>
+                <div class="hero">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                      <path d="M20 42C13.8 42 9 37.2 9 31C9 25.2 13.3 20.4 18.9 19.7C21 14.6 25.9 11 31.7 11C38.8 11 44.5 16.6 44.9 23.7C49.9 24.3 53.8 28.6 53.8 33.8C53.8 39.4 49.3 44 43.6 44H20V42Z" fill="var(--cloud)"/>
+                    </svg>
+                  </div>
+                  <div class="temp">19°</div>
+                </div>
+                <div class="footnote">Soft light and mild skies</div>
+              </div>
+              <div class="card">
+                <div class="label">Weather</div>
+                <div class="hero">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                      <path d="M20 38C13.8 38 9 33.2 9 27C9 21.2 13.3 16.4 18.9 15.7C21 10.6 25.9 7 31.7 7C38.8 7 44.5 12.6 44.9 19.7C49.9 20.3 53.8 24.6 53.8 29.8C53.8 35.4 49.3 40 43.6 40H20V38Z" fill="var(--blue)" opacity="0.58"/>
+                      <g stroke="var(--blue)" stroke-width="3.5" stroke-linecap="round">
+                        <line x1="22" y1="46" x2="19" y2="56"/><line x1="34" y1="46" x2="31" y2="58"/><line x1="46" y1="46" x2="43" y2="56"/>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="temp">16°</div>
+                </div>
+                <div class="footnote">Wet streets and cooler air</div>
+              </div>
+              <div class="card">
+                <div class="label">Weather</div>
+                <div class="hero">
+                  <div class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                      <path d="M20 38C13.8 38 9 33.2 9 27C9 21.2 13.3 16.4 18.9 15.7C21 10.6 25.9 7 31.7 7C38.8 7 44.5 12.6 44.9 19.7C49.9 20.3 53.8 24.6 53.8 29.8C53.8 35.4 49.3 40 43.6 40H20V38Z" fill="var(--storm)" opacity="0.85"/>
+                      <path d="M31 42L25 53H32L29 61L42 47H35L38 42H31Z" fill="var(--yellow)"/>
+                      <line x1="47" y1="46" x2="44" y2="56" stroke="var(--blue)" stroke-width="3.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="temp">13°</div>
+                </div>
+                <div class="footnote">Thunder clouds and sharp bursts</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

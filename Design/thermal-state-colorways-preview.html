@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluxBar Thermal State Colorways</title>
+  <style>
+    :root {
+      --bg: #1e2329;
+      --panel: rgba(255,255,255,0.02);
+      --card: #242120;
+      --card-edge: rgba(255,255,255,0.035);
+      --text: #f3f5f7;
+      --muted: rgba(243,245,247,0.62);
+      --soft: rgba(243,245,247,0.46);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,58,81,0.32), transparent 30%),
+        linear-gradient(180deg, #21262d 0%, #1a1f25 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .note {
+      margin: 0;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .group {
+      margin-bottom: 24px;
+    }
+
+    .group-title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      min-height: 220px;
+      background: var(--card);
+      border: 1px solid var(--card-edge);
+      border-radius: 28px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .state {
+      margin: 0;
+      font-family: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+    }
+
+    .foot {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--soft);
+      line-height: 1.2;
+    }
+
+    .swatch-row {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(243,245,247,0.54);
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    @media (max-width: 1100px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1 class="title">Thermal State Title Colorways</h1>
+      <p class="note">
+        Only the state title changes color. Card background, eyebrow, and bottom footnote stay neutral so the color meaning is concentrated in the status word itself.
+      </p>
+    </header>
+
+    <section class="group">
+      <h2 class="group-title">Set A · Soft Utility</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#22D3EE;">Chill</h3></div>
+          <div class="foot">All good and easy</div>
+          <div class="swatch-row"><span class="swatch" style="background:#22D3EE;"></span>#22D3EE</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#F5C451;">Warming up</h3></div>
+          <div class="foot">Starting to feel warm</div>
+          <div class="swatch-row"><span class="swatch" style="background:#F5C451;"></span>#F5C451</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#F28C38;">Hot and busy</h3></div>
+          <div class="foot">Heat is building up</div>
+          <div class="swatch-row"><span class="swatch" style="background:#F28C38;"></span>#F28C38</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#FF5A5F;">Overheating vibes</h3></div>
+          <div class="foot">Needs a cooldown</div>
+          <div class="swatch-row"><span class="swatch" style="background:#FF5A5F;"></span>#FF5A5F</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-title">Set B · Native Bright</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#3DD6F5;">Chill</h3></div>
+          <div class="foot">All good and easy</div>
+          <div class="swatch-row"><span class="swatch" style="background:#3DD6F5;"></span>#3DD6F5</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#FFD166;">Warming up</h3></div>
+          <div class="foot">Starting to feel warm</div>
+          <div class="swatch-row"><span class="swatch" style="background:#FFD166;"></span>#FFD166</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#FF9F43;">Hot and busy</h3></div>
+          <div class="foot">Heat is building up</div>
+          <div class="swatch-row"><span class="swatch" style="background:#FF9F43;"></span>#FF9F43</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#FF6B6B;">Overheating vibes</h3></div>
+          <div class="foot">Needs a cooldown</div>
+          <div class="swatch-row"><span class="swatch" style="background:#FF6B6B;"></span>#FF6B6B</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group-title">Set C · Lower Saturation</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#53C9DE;">Chill</h3></div>
+          <div class="foot">All good and easy</div>
+          <div class="swatch-row"><span class="swatch" style="background:#53C9DE;"></span>#53C9DE</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#D9BA62;">Warming up</h3></div>
+          <div class="foot">Starting to feel warm</div>
+          <div class="swatch-row"><span class="swatch" style="background:#D9BA62;"></span>#D9BA62</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#D88952;">Hot and busy</h3></div>
+          <div class="foot">Heat is building up</div>
+          <div class="swatch-row"><span class="swatch" style="background:#D88952;"></span>#D88952</div>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Thermal State</div>
+          <div class="center"><h3 class="state" style="color:#E06B70;">Overheating vibes</h3></div>
+          <div class="foot">Needs a cooldown</div>
+          <div class="swatch-row"><span class="swatch" style="background:#E06B70;"></span>#E06B70</div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

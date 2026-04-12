@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FluxBar Beats Teal Preview</title>
+  <style>
+    :root {
+      --ink: #102034;
+      --muted: #5f7388;
+      --line: rgba(16, 32, 52, 0.10);
+      --panel: rgba(248, 252, 255, 0.88);
+      --teal-a: #59e1d8;
+      --teal-b: #32d6c9;
+      --blue-a: #4f86ff;
+      --blue-b: #5e63f4;
+      --bg-0: #eef8fb;
+      --bg-1: #dff1f5;
+      --bg-2: #dee9fb;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 16%, rgba(255,255,255,0.94), transparent 22%),
+        radial-gradient(circle at 82% 14%, rgba(89,225,216,0.18), transparent 18%),
+        radial-gradient(circle at 78% 74%, rgba(79,134,255,0.18), transparent 18%),
+        linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 42%, var(--bg-2) 100%);
+    }
+
+    .page {
+      min-height: 100%;
+      padding: 42px;
+    }
+
+    .board {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 36px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(245,251,255,0.70)),
+        var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow:
+        0 26px 64px rgba(16, 32, 52, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #6a8aa1;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      font-weight: 550;
+    }
+
+    .intro h1 .bar {
+      font-weight: 900;
+      margin-left: 0.02em;
+    }
+
+    .intro p {
+      margin: 14px 0 0;
+      max-width: 760px;
+      font-size: 20px;
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .color-note {
+      padding: 22px 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(79, 134, 255, 0.12);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.92), transparent 48%),
+        linear-gradient(135deg, rgba(89,225,216,0.12), rgba(79,134,255,0.10));
+    }
+
+    .color-note strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #527291;
+    }
+
+    .color-note span {
+      display: block;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #60768d;
+    }
+
+    .preview {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 6% 8%, rgba(255,255,255,0.66), transparent 26%),
+        linear-gradient(135deg, rgba(89,225,216,0.95) 0%, rgba(55,215,203,0.88) 26%, rgba(79,134,255,0.92) 66%, rgba(94,99,244,0.90) 100%);
+      padding: 34px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+    }
+
+    .preview::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      filter: blur(6px);
+    }
+
+    .window {
+      position: relative;
+      z-index: 1;
+      border-radius: 28px;
+      overflow: hidden;
+      background: rgba(245, 250, 255, 0.96);
+      box-shadow: 0 22px 42px rgba(9, 24, 44, 0.14);
+    }
+
+    .window-top {
+      height: 66px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 22px;
+      background: rgba(234, 244, 248, 0.88);
+      border-bottom: 1px solid rgba(16, 32, 52, 0.06);
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(16, 32, 52, 0.16);
+    }
+
+    .window-body {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+      padding: 28px;
+    }
+
+    .header-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 250px;
+      padding: 28px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.50), transparent 34%),
+        linear-gradient(135deg, rgba(89,225,216,0.94) 0%, rgba(53,214,201,0.88) 24%, rgba(79,134,255,0.90) 64%, rgba(94,99,244,0.86) 100%);
+      color: white;
+    }
+
+    .brand {
+      margin: 0;
+      font-size: 30px;
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .brand .flux {
+      font-weight: 500;
+    }
+
+    .brand .bar {
+      font-weight: 900;
+      margin-left: 0.02em;
+    }
+
+    .brand-sub {
+      margin: 12px 0 0;
+      max-width: 320px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.84);
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.20);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .spec {
+      padding: 24px;
+      border-radius: 24px;
+      background: white;
+      border: 1px solid rgba(16, 32, 52, 0.06);
+    }
+
+    .spec h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .spec p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .swatches {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0 24px;
+    }
+
+    .swatch {
+      flex: 1;
+      min-height: 68px;
+      border-radius: 18px;
+      border: 1px solid rgba(16, 32, 52, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swatch::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.84);
+    }
+
+    .swatch.t1 { background: #59e1d8; }
+    .swatch.t2 { background: #32d6c9; }
+    .swatch.b1 { background: #4f86ff; }
+    .swatch.b2 { background: #5e63f4; }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .kpi {
+      padding: 16px 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(244,249,253,0.90), rgba(240,246,251,0.72));
+      border: 1px solid rgba(16, 32, 52, 0.05);
+    }
+
+    .kpi strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: #688097;
+    }
+
+    .kpi span {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .kpi:nth-child(1) span { color: #1a788b; }
+    .kpi:nth-child(2) span { color: #3470ff; }
+    .kpi:nth-child(3) span { color: #615ef2; }
+
+    .footer-note {
+      margin-top: 22px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .footer-note strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1100px) {
+      .page { padding: 18px; }
+      .board { padding: 22px; }
+      .intro, .window-body { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="board">
+      <p class="eyebrow">Beats-Inspired Preview</p>
+
+      <section class="intro">
+        <div>
+          <h1><span class="flux">Flux</span><span class="bar">Bar</span></h1>
+          <p>这版把标题缩小了，并把配色切到更接近你给的 Beats 页面那种蓝绿电感。品牌字保持单色逻辑，颜色重点放在 header 背景和功能氛围上。</p>
+        </div>
+
+        <aside class="color-note">
+          <strong>Color Direction</strong>
+          <span>这里不是直接读取网页里的精确色值，而是基于 Beats 页面视觉做的推导：更亮的青绿作为前景能量色，向电蓝和紫蓝过渡，让整体既有运动感，也有科技感。</span>
+        </aside>
+      </section>
+
+      <section class="preview">
+        <div class="window">
+          <div class="window-top">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+
+          <div class="window-body">
+            <div class="header-card">
+              <div>
+                <h2 class="brand"><span class="flux">Flux</span><span class="bar">Bar</span></h2>
+                <p class="brand-sub">A lightweight monitor for load, heat, and activity.</p>
+              </div>
+
+              <div class="chips">
+                <span class="chip">lighter title</span>
+                <span class="chip">teal-blue energy</span>
+                <span class="chip">single-color wordmark</span>
+              </div>
+            </div>
+
+            <div class="spec">
+              <h2>Preview Notes</h2>
+              <p>标题缩到更适合弹出面板 header 的尺寸，维持你选的 `V1` 字距方向，但不再使用之前那种深石墨配色。现在更偏运动科技、冷感、带电流感。</p>
+
+              <div class="swatches">
+                <div class="swatch t1" data-label="teal 1"></div>
+                <div class="swatch t2" data-label="teal 2"></div>
+                <div class="swatch b1" data-label="blue 1"></div>
+                <div class="swatch b2" data-label="blue 2"></div>
+              </div>
+
+              <div class="kpis">
+                <div class="kpi">
+                  <strong>temp</strong>
+                  <span>53°</span>
+                </div>
+                <div class="kpi">
+                  <strong>cpu</strong>
+                  <span>42%</span>
+                </div>
+                <div class="kpi">
+                  <strong>mem</strong>
+                  <span>61%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="footer-note"><strong>如果这个颜色方向接近你要的感觉，</strong>我下一步就把它收敛成可以落到应用里的版本，只改 header 这一块，继续避免影响其它模块显示。</p>
+    </main>
+  </div>
+</body>
+</html>
