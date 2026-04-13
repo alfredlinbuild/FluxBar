@@ -53,6 +53,10 @@ struct MenuBarPanelView: View {
     @Environment(\.openSettings) private var openSettings
     @State private var selectedTrendWindow: TrendWindow = .fiveMinutes
     @State private var overviewPrimaryRowHeight: CGFloat?
+    @State private var oscarManualStatus: OscarDayStatus?
+    @State private var oscarManualExpiresAt: Date?
+
+    private let oscarManualOverrideDuration: TimeInterval = 10
 
     var body: some View {
         ScrollView {
@@ -428,6 +432,111 @@ struct MenuBarPanelView: View {
         return snapshot.temperature.isAvailable ? snapshot[keyPath: source] : "Unavailable: \(snapshot[keyPath: source])"
     }
 
+    private func autoOscarDayStatus(at now: Date) -> OscarDayStatus {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: now)
+        if weekday == 1 || weekday == 7 {
+            return .outdoor
+        }
+
+        let minutes = calendar.component(.hour, from: now) * 60 + calendar.component(.minute, from: now)
+        switch minutes {
+        case ..<(8 * 60):
+            return .breakfast
+        case 8 * 60..<(11 * 60 + 30):
+            return .outdoor
+        case (11 * 60 + 30)..<(13 * 60 + 30):
+            return .nap
+        case (13 * 60 + 30)..<15 * 60:
+            return .fruit
+        case 15 * 60..<(16 * 60 + 30):
+            return .outdoor
+        default:
+            return .fruit
+        }
+    }
+
+    private func resolvedOscarDayStatus(at now: Date) -> OscarDayStatus {
+        if let manual = oscarManualStatus,
+           let expiresAt = oscarManualExpiresAt,
+           now < expiresAt {
+            return manual
+        }
+        return autoOscarDayStatus(at: now)
+    }
+
+    private func oscarDayState(for status: OscarDayStatus) -> OscarDayState {
+        switch status {
+        case .breakfast:
+            return OscarDayState(
+                emoji: "🥣",
+                title: "Breakfast Time",
+                tint: Color(red: 0xF5 / 255, green: 0xC4 / 255, blue: 0x51 / 255)
+            )
+        case .nap:
+            return OscarDayState(
+                emoji: "🛏️",
+                title: "Nap Time",
+                tint: Color(red: 0xA8 / 255, green: 0x9A / 255, blue: 0xFF / 255)
+            )
+        case .outdoor:
+            return OscarDayState(
+                emoji: "🛝",
+                title: "Outdoor Play",
+                tint: Color(red: 0x7E / 255, green: 0xD3 / 255, blue: 0x92 / 255)
+            )
+        case .fruit:
+            return OscarDayState(
+                emoji: "🍓",
+                title: "Fruit Snack",
+                tint: Color(red: 0xFF / 255, green: 0x9F / 255, blue: 0xB0 / 255)
+            )
+        }
+    }
+
+    private func cycleOscarDayStatus(at now: Date) {
+        let current = resolvedOscarDayStatus(at: now)
+        oscarManualStatus = current.next
+        oscarManualExpiresAt = now.addingTimeInterval(oscarManualOverrideDuration)
+    }
+
+    private func oscarDayCountdownText(at now: Date) -> String {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: now)
+        if weekday == 1 || weekday == 7 {
+            return "Weekend break"
+        }
+
+        let schoolStart = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: now) ?? now
+        let schoolEnd = calendar.date(bySettingHour: 16, minute: 30, second: 0, of: now) ?? now
+
+        if now < schoolStart {
+            return "School in \(formattedHourMinuteCountdown(from: now, to: schoolStart))"
+        }
+        if now < schoolEnd {
+            return "Pickup in \(formattedHourMinuteCountdown(from: now, to: schoolEnd))"
+        }
+
+        var nextSchoolStart = calendar.date(byAdding: .day, value: 1, to: now) ?? now
+        nextSchoolStart = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: nextSchoolStart) ?? nextSchoolStart
+        while true {
+            let nextWeekday = calendar.component(.weekday, from: nextSchoolStart)
+            if (2...6).contains(nextWeekday) {
+                break
+            }
+            nextSchoolStart = calendar.date(byAdding: .day, value: 1, to: nextSchoolStart) ?? nextSchoolStart
+            nextSchoolStart = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: nextSchoolStart) ?? nextSchoolStart
+        }
+        return "School in \(formattedHourMinuteCountdown(from: now, to: nextSchoolStart))"
+    }
+
+    private func formattedHourMinuteCountdown(from start: Date, to end: Date) -> String {
+        let totalMinutes = max(Int(end.timeIntervalSince(start) / 60), 0)
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes % 60
+        return "\(hours)h \(minutes)m"
+    }
+
     @ViewBuilder
     private var flexibleOverviewSlotCard: some View {
         FlexibleOverviewSlotCard(mode: $settings.overviewFlexibleSlotMode) {
@@ -444,6 +553,19 @@ struct MenuBarPanelView: View {
                     value: "Deep Work",
                     footnote: "Protected time for building",
                     tint: Color(red: 0x8B / 255, green: 0x7C / 255, blue: 0xFF / 255)
+                )
+            case .oscarDay:
+                let now = Date()
+                let dayStatus = resolvedOscarDayStatus(at: now)
+                let dayState = oscarDayState(for: dayStatus)
+                OscarDayOverviewCard(
+                    emoji: dayState.emoji,
+                    title: dayState.title,
+                    footnote: oscarDayCountdownText(at: now),
+                    tint: dayState.tint,
+                    onCycle: {
+                        cycleOscarDayStatus(at: Date())
+                    }
                 )
             case .weather:
                 WeatherOverviewCard(
@@ -615,7 +737,7 @@ private struct FlexibleOverviewSlotCard<Content: View>: View {
                     }
                 }
                 .padding(4)
-                .frame(width: 120)
+                .frame(width: 140)
             }
 
             content()
@@ -633,6 +755,8 @@ private struct FlexibleOverviewSlotCard<Content: View>: View {
             return "Weather"
         case .focus:
             return "Focus"
+        case .oscarDay:
+            return "Oscar's Day"
         }
     }
 }
@@ -698,6 +822,7 @@ private struct FocusOverviewCard: View {
             Text(value)
                 .font(.system(size: 22, weight: .bold, design: .rounded))
                 .lineLimit(1)
+                .minimumScaleFactor(0.82)
                 .foregroundStyle(tint)
                 .frame(maxWidth: .infinity, alignment: .center)
 
@@ -707,6 +832,73 @@ private struct FocusOverviewCard: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
+        }
+    }
+}
+
+private struct OscarDayOverviewCard: View {
+    let emoji: String
+    let title: String
+    let footnote: String
+    let tint: Color
+    let onCycle: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Spacer(minLength: 0)
+
+            Button(action: onCycle) {
+                VStack(spacing: 0) {
+                    Text(emoji)
+                        .font(.system(size: 34))
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .offset(y: 4)
+
+                    Text(title)
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                        .foregroundStyle(tint)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .offset(y: 4)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            Spacer(minLength: 10)
+
+            Text(footnote)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        }
+    }
+}
+
+private struct OscarDayState {
+    let emoji: String
+    let title: String
+    let tint: Color
+}
+
+private enum OscarDayStatus: CaseIterable {
+    case breakfast
+    case nap
+    case outdoor
+    case fruit
+
+    var next: OscarDayStatus {
+        switch self {
+        case .breakfast:
+            return .nap
+        case .nap:
+            return .outdoor
+        case .outdoor:
+            return .fruit
+        case .fruit:
+            return .breakfast
         }
     }
 }

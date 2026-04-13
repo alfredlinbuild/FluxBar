@@ -84,6 +84,7 @@ enum OverviewFlexibleSlotMode: String, CaseIterable, Identifiable, Codable {
     case thermal
     case weather
     case focus
+    case oscarDay
 
     var id: String { rawValue }
 
@@ -92,6 +93,7 @@ enum OverviewFlexibleSlotMode: String, CaseIterable, Identifiable, Codable {
         case .thermal: return "Thermal"
         case .weather: return "Weather"
         case .focus: return "Focus"
+        case .oscarDay: return "Oscar's Day"
         }
     }
 }
