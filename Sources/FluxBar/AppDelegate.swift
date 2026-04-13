@@ -27,6 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBarController: StatusBarController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "debug_appDidFinishLaunching_at")
         NSApp.setActivationPolicy(.accessory)
         installStatusBarIfPossible()
         DispatchQueue.main.async { [weak self] in
@@ -38,9 +39,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard statusBarController == nil,
               let settings = FluxBarRuntime.settings,
               let monitor = FluxBarRuntime.monitor else {
+            debugStatusLog("installStatusBarIfPossible skipped controller=\(statusBarController != nil) settings=\(FluxBarRuntime.settings != nil) monitor=\(FluxBarRuntime.monitor != nil)")
             return
         }
 
+        debugStatusLog("installStatusBarIfPossible creating controller")
         statusBarController = StatusBarController(settings: settings, monitor: monitor)
     }
 }
@@ -79,8 +82,25 @@ private final class StatusBarController {
         )
     }
 
-    private func configureStatusItem() {
-        guard let button = statusItem.button else { return }
+    private func configureStatusItem(retryCount: Int = 0) {
+        guard let button = statusItem.button else {
+            UserDefaults.standard.set(retryCount, forKey: "debug_statusItem_button_nil_retry")
+            debugStatusLog("configureStatusItem button=nil retry=\(retryCount)")
+            guard retryCount < 20 else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.configureStatusItem(retryCount: retryCount + 1)
+            }
+            return
+        }
+
+        if statusView.superview === button {
+            UserDefaults.standard.set(true, forKey: "debug_statusItem_already_attached")
+            debugStatusLog("configureStatusItem already attached")
+            return
+        }
+
+        UserDefaults.standard.set(true, forKey: "debug_statusItem_attach_success")
+        debugStatusLog("configureStatusItem attaching custom status view")
 
         button.title = ""
         button.image = nil
@@ -210,6 +230,37 @@ private final class StatusBarController {
 
         statusView.render(model: model)
         statusItem.length = model.width
+        UserDefaults.standard.set(model.width, forKey: "debug_statusItem_width")
+        UserDefaults.standard.set(statusView.superview != nil, forKey: "debug_statusItem_hasSuperview")
+        if let button = statusItem.button, let window = button.window {
+            let screenFrame = window.convertToScreen(button.convert(button.bounds, to: nil))
+            UserDefaults.standard.set(NSStringFromRect(screenFrame), forKey: "debug_statusItem_screenFrame")
+            UserDefaults.standard.set(NSStringFromRect(window.frame), forKey: "debug_statusItem_windowFrame")
+        } else {
+            UserDefaults.standard.set("nil", forKey: "debug_statusItem_screenFrame")
+        }
+        debugStatusLog("refreshStatusItem width=\(model.width) mode=\(model.presentation.mode.rawValue) hasSuperview=\(statusView.superview != nil)")
+    }
+}
+
+@MainActor
+private func debugStatusLog(_ message: String) {
+    let path = "/tmp/fluxbar-status-debug.log"
+    let line = "[\(Date())] \(message)\n"
+    guard let data = line.data(using: .utf8) else { return }
+    let url = URL(fileURLWithPath: path)
+    if FileManager.default.fileExists(atPath: path) {
+        if let handle = try? FileHandle(forWritingTo: url) {
+            do {
+                try handle.seekToEnd()
+                try handle.write(contentsOf: data)
+                try handle.close()
+            } catch {
+                try? handle.close()
+            }
+        }
+    } else {
+        try? data.write(to: url, options: .atomic)
     }
 }
 
