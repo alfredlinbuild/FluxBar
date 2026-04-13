@@ -55,6 +55,8 @@ struct MenuBarPanelView: View {
     @State private var overviewPrimaryRowHeight: CGFloat?
     @State private var oscarManualStatus: OscarDayStatus?
     @State private var oscarManualExpiresAt: Date?
+    @State private var focusStatus: FocusCardStatus = .deepWork
+    @State private var weatherStatus: WeatherCardStatus = .sunny
 
     private let oscarManualOverrideDuration: TimeInterval = 10
 
@@ -500,6 +502,25 @@ struct MenuBarPanelView: View {
         oscarManualExpiresAt = now.addingTimeInterval(oscarManualOverrideDuration)
     }
 
+    private func cycleFocusStatus() {
+        focusStatus = focusStatus.next
+    }
+
+    private func cycleWeatherStatus() {
+        weatherStatus = weatherStatus.next
+    }
+
+    // Keep the view model boundary so real weather providers can replace
+    // only the content source later without changing card interaction logic.
+    private func resolvedWeatherDisplay() -> WeatherCardDisplay {
+        WeatherCardDisplay(
+            temperature: "23°",
+            footnote: weatherStatus.subtitle,
+            symbolName: weatherStatus.symbolName,
+            tint: weatherStatus.tint
+        )
+    }
+
     private func oscarDayCountdownText(at now: Date) -> String {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: now)
@@ -550,9 +571,10 @@ struct MenuBarPanelView: View {
                 )
             case .focus:
                 FocusOverviewCard(
-                    value: "Deep Work",
-                    footnote: "Protected time for building",
-                    tint: Color(red: 0x8B / 255, green: 0x7C / 255, blue: 0xFF / 255)
+                    value: focusStatus.title,
+                    footnote: focusStatus.subtitle,
+                    tint: focusStatus.tint,
+                    onCycle: cycleFocusStatus
                 )
             case .oscarDay:
                 let now = Date()
@@ -568,11 +590,13 @@ struct MenuBarPanelView: View {
                     }
                 )
             case .weather:
+                let weatherDisplay = resolvedWeatherDisplay()
                 WeatherOverviewCard(
-                    temperature: "23°",
-                    footnote: "Clear and bright outside",
-                    symbolName: "sun.max.fill",
-                    tint: Color(red: 0xF5 / 255, green: 0xC4 / 255, blue: 0x51 / 255)
+                    temperature: weatherDisplay.temperature,
+                    footnote: weatherDisplay.footnote,
+                    symbolName: weatherDisplay.symbolName,
+                    tint: weatherDisplay.tint,
+                    onCycle: cycleWeatherStatus
                 )
             }
         }
@@ -814,17 +838,22 @@ private struct FocusOverviewCard: View {
     let value: String
     let footnote: String
     let tint: Color
+    let onCycle: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer(minLength: 0)
 
-            Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .lineLimit(1)
-                .minimumScaleFactor(0.82)
-                .foregroundStyle(tint)
-                .frame(maxWidth: .infinity, alignment: .center)
+            Button(action: onCycle) {
+                Text(value)
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
+                    .foregroundStyle(tint)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
 
             Spacer(minLength: 10)
 
@@ -908,23 +937,28 @@ private struct WeatherOverviewCard: View {
     let footnote: String
     let symbolName: String
     let tint: Color
+    let onCycle: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer(minLength: 0)
 
-            HStack(alignment: .center, spacing: 10) {
-                Image(systemName: symbolName)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(tint)
-                    .frame(width: 28, alignment: .trailing)
+            Button(action: onCycle) {
+                HStack(alignment: .center, spacing: 10) {
+                    Image(systemName: symbolName)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(tint)
+                        .frame(width: 28, alignment: .trailing)
 
-                Text(temperature)
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundStyle(.primary)
-                    .frame(minWidth: 0, alignment: .leading)
+                    Text(temperature)
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
+                        .frame(minWidth: 0, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .contentShape(Rectangle())
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .buttonStyle(.plain)
 
             Spacer(minLength: 10)
 
@@ -934,6 +968,99 @@ private struct WeatherOverviewCard: View {
                 .lineLimit(2)
         }
     }
+}
+
+private enum FocusCardStatus: CaseIterable {
+    case deepWork
+    case planning
+    case review
+    case recharge
+
+    var title: String {
+        switch self {
+        case .deepWork: return "Deep Work"
+        case .planning: return "Planning"
+        case .review: return "Review"
+        case .recharge: return "Recharge"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .deepWork: return "Protected time for building"
+        case .planning: return "Mapping priorities and milestones"
+        case .review: return "Assessing progress and quality"
+        case .recharge: return "Short reset before next sprint"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .deepWork: return Color(red: 0x8B / 255, green: 0x7C / 255, blue: 0xFF / 255)
+        case .planning: return Color(red: 0x62 / 255, green: 0xB2 / 255, blue: 0xFF / 255)
+        case .review: return Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x9B / 255)
+        case .recharge: return Color(red: 0xFF / 255, green: 0xA6 / 255, blue: 0x5A / 255)
+        }
+    }
+
+    var next: FocusCardStatus {
+        switch self {
+        case .deepWork: return .planning
+        case .planning: return .review
+        case .review: return .recharge
+        case .recharge: return .deepWork
+        }
+    }
+}
+
+private enum WeatherCardStatus: CaseIterable {
+    case sunny
+    case cloudy
+    case rainy
+    case breezy
+
+    var symbolName: String {
+        switch self {
+        case .sunny: return "sun.max.fill"
+        case .cloudy: return "cloud.fill"
+        case .rainy: return "cloud.rain.fill"
+        case .breezy: return "wind"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .sunny: return "Clear and bright outside"
+        case .cloudy: return "Overcast with soft light"
+        case .rainy: return "Light rain in your area"
+        case .breezy: return "Breezy conditions today"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .sunny: return Color(red: 0xF5 / 255, green: 0xC4 / 255, blue: 0x51 / 255)
+        case .cloudy: return Color(red: 0x9A / 255, green: 0xA6 / 255, blue: 0xB2 / 255)
+        case .rainy: return Color(red: 0x5F / 255, green: 0x93 / 255, blue: 0xF6 / 255)
+        case .breezy: return Color(red: 0x6D / 255, green: 0xBA / 255, blue: 0xCB / 255)
+        }
+    }
+
+    var next: WeatherCardStatus {
+        switch self {
+        case .sunny: return .cloudy
+        case .cloudy: return .rainy
+        case .rainy: return .breezy
+        case .breezy: return .sunny
+        }
+    }
+}
+
+private struct WeatherCardDisplay {
+    let temperature: String
+    let footnote: String
+    let symbolName: String
+    let tint: Color
 }
 
 private struct NetworkOverviewMetricCard: View {
@@ -1193,11 +1320,6 @@ private struct TrendMetricCard: View {
     let valueFormatter: (Double) -> String
     var emptyMessage: String = "Waiting for trend"
 
-    private var latestValueText: String {
-        guard let latest = points.last else { return emptyMessage }
-        return valueFormatter(latest)
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
@@ -1208,10 +1330,6 @@ private struct TrendMetricCard: View {
                 Text(value)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .monospacedDigit()
-                Spacer()
-                Text(latestValueText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
 
             SparklineView(points: points, tint: tint)

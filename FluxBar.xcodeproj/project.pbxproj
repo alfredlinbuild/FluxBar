@@ -248,7 +248,7 @@
 			baseConfigurationReference = A00000000000000000000041 /* Debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alfred.FluxBar;
 			};
 			name = Debug;
@@ -258,7 +258,7 @@
 			baseConfigurationReference = A00000000000000000000042 /* Release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alfred.FluxBar;
 			};
 			name = Release;
