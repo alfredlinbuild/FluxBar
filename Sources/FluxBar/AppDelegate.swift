@@ -28,7 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "debug_appDidFinishLaunching_at")
-        NSApp.setActivationPolicy(.accessory)
+        NSApp.setActivationPolicy(.regular)
         installStatusBarIfPossible()
         DispatchQueue.main.async { [weak self] in
             self?.installStatusBarIfPossible()
@@ -105,6 +105,9 @@ private final class StatusBarController {
         button.title = ""
         button.image = nil
         button.isBordered = false
+        button.target = self
+        button.action = #selector(handleStatusItemButtonClick(_:))
+        button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         button.addSubview(statusView)
         statusView.translatesAutoresizingMaskIntoConstraints = false
         statusView.onClick = { [weak self] in
@@ -117,6 +120,11 @@ private final class StatusBarController {
             statusView.topAnchor.constraint(equalTo: button.topAnchor),
             statusView.bottomAnchor.constraint(equalTo: button.bottomAnchor)
         ])
+    }
+
+    @objc private func handleStatusItemButtonClick(_ sender: NSStatusBarButton) {
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "debug_statusItem_buttonAction_at")
+        togglePopover()
     }
 
     private func bindState() {
@@ -146,12 +154,22 @@ private final class StatusBarController {
 
     private func togglePopover() {
         guard let button = statusItem.button else { return }
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "debug_popover_toggle_at")
+        UserDefaults.standard.set(popover.isShown, forKey: "debug_popover_wasShown_beforeToggle")
 
         if popover.isShown {
             closePopover()
+            UserDefaults.standard.set(false, forKey: "debug_popover_isShown_afterToggle")
         } else {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-            popover.contentViewController?.view.window?.becomeKey()
+            if let popoverWindow = popover.contentViewController?.view.window {
+                popoverWindow.collectionBehavior.insert([.fullScreenAuxiliary, .moveToActiveSpace, .transient])
+                popoverWindow.level = .statusBar
+                popoverWindow.becomeKey()
+                UserDefaults.standard.set(NSStringFromRect(popoverWindow.frame), forKey: "debug_popover_windowFrame")
+                UserDefaults.standard.set(NSNumber(value: Int(popoverWindow.level.rawValue)), forKey: "debug_popover_windowLevel")
+            }
+            UserDefaults.standard.set(popover.isShown, forKey: "debug_popover_isShown_afterToggle")
             installPopoverObservers()
         }
     }
